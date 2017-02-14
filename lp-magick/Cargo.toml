@@ -1,0 +1,7 @@
+[package]
+name = "lp-magick"
+version = "0.1.0"
+authors = ["Michael Macias <zaeleus@gmail.com>"]
+
+[dependencies]
+libc = "0.2.20"

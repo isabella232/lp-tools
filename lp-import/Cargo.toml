@@ -1,0 +1,18 @@
+[package]
+name = "lp-import"
+version = "0.1.0"
+authors = ["Michael Macias <zaeleus@gmail.com>"]
+
+[dependencies]
+chrono = "0.2.25"
+diesel = "0.10.0"
+futures = "0.1.10"
+futures-cpupool = "0.1.2"
+glob = "0.2.11"
+lazy_static = "0.2.2"
+lp = { path = "../lp" }
+lp-magick = { path = "../lp-magick" }
+rand = "0.3.15"
+regex = "0.2.0"
+toml = "0.3.0"
+unidecode = "0.3.0"

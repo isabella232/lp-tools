@@ -1,0 +1,19 @@
+[package]
+name = "lp-server"
+version = "0.1.0"
+authors = ["Michael Macias <zaeleus@gmail.com>"]
+
+[dependencies]
+lazy_static = "0.2.2"
+lp = { path = "../lp" }
+rocket = "0.2.0"
+rocket_codegen = "0.2.0"
+rocket_contrib = "0.2.0"
+serde = "0.9.1"
+serde_derive = "0.9.1"
+serde_json = "0.9.1"
+
+[dependencies.juniper]
+version = "0.6.2"
+default-features = false
+features = ["serde"]

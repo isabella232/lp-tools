@@ -1,0 +1,48 @@
+use chrono::UTC;
+use diesel::pg::PgConnection;
+use diesel::prelude::*;
+use diesel;
+
+use models::{ArtistId, ArtistCreditId, ArtistCreditName, NewArtistCreditName};
+
+pub struct ArtistCreditNameRepository<'a> {
+    connection: &'a PgConnection,
+}
+
+impl<'a> ArtistCreditNameRepository<'a> {
+    pub fn new(connection: &PgConnection) -> ArtistCreditNameRepository {
+        ArtistCreditNameRepository { connection: connection }
+    }
+
+    pub fn create(&self,
+                  artist_id: ArtistId,
+                  artist_credit_id: ArtistCreditId,
+                  position: i16,
+                  name: &str,
+                  locale: &str,
+                  is_default: bool,
+                  is_original: bool,
+                  separator: &'a str) -> ArtistCreditName {
+        use schema::artist_credit_names;
+
+        let now = UTC::now().naive_utc();
+
+        let new_artist_credit_name = NewArtistCreditName {
+            artist_id: artist_id,
+            artist_credit_id: artist_credit_id,
+            position: position,
+            name: name,
+            locale: locale,
+            is_default: is_default,
+            is_original: is_original,
+            separator: separator,
+            created_at: now,
+            updated_at: now,
+        };
+
+        diesel::insert(&new_artist_credit_name)
+            .into(artist_credit_names::table)
+            .get_result(self.connection)
+            .expect("Error creating new artist credit name")
+    }
+}

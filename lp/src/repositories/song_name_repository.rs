@@ -1,0 +1,51 @@
+use chrono::UTC;
+use diesel::pg::PgConnection;
+use diesel::prelude::*;
+use diesel;
+
+use models::{SongId, SongName, NewSongName};
+
+pub struct SongNameRepository<'a> {
+    connection: &'a PgConnection,
+}
+
+impl<'a> SongNameRepository<'a> {
+    pub fn new(connection: &PgConnection) -> SongNameRepository {
+        SongNameRepository { connection: connection }
+    }
+
+    pub fn find_by_song_id(&self, id: SongId) -> Vec<SongName> {
+        use schema::song_names::dsl::{song_names, song_id};
+
+        song_names
+            .filter(song_id.eq(id))
+            .load(self.connection)
+            .expect("failed to load names")
+    }
+
+    pub fn create(&self,
+                  song_id: SongId,
+                  name: &str,
+                  locale: &str,
+                  is_default: bool,
+                  is_original: bool) -> SongName {
+        use schema::song_names;
+
+        let now = UTC::now().naive_utc();
+
+        let new_song_name = NewSongName {
+            song_id: song_id,
+            name: name,
+            locale: locale,
+            is_default: is_default,
+            is_original: is_original,
+            created_at: now,
+            updated_at: now,
+        };
+
+        diesel::insert(&new_song_name)
+            .into(song_names::table)
+            .get_result(self.connection)
+            .expect("Error creating new song")
+    }
+}

@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "lp",
+  "lp-import",
+  "lp-magick",
+  "lp-server",
+]
