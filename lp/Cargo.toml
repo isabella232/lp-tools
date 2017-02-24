@@ -4,11 +4,11 @@ version = "0.1.0"
 authors = ["Michael Macias <zaeleus@gmail.com>"]
 
 [dependencies]
-chrono = "0.2.25"
-diesel = { version = "0.10.0", features = ["chrono"] }
-diesel_codegen = { version = "0.10.0", features = ["postgres"] }
+chrono = "0.3.0"
+diesel = { version = "0.11.4", features = ["chrono"] }
+diesel_codegen = { version = "0.11.0", features = ["postgres"] }
 dotenv = "0.8.0"
 juniper = "0.6.2"
 lazy_static = "0.2.2"
 r2d2 = "0.7.1"
-r2d2-diesel = "0.10.0"
+r2d2-diesel = "0.11.0"
