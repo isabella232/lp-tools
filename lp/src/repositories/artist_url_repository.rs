@@ -14,6 +14,15 @@ impl<'a> ArtistUrlRepository<'a> {
         ArtistUrlRepository { connection: connection }
     }
 
+    pub fn find_by_artist_id(&self, id: ArtistId) -> Vec<ArtistUrl> {
+        use schema::artist_urls::dsl::{artist_urls, artist_id};
+
+        artist_urls
+            .filter(artist_id.eq(id))
+            .load(self.connection)
+            .expect("failed to load names")
+    }
+
     pub fn create(&self, artist_id: ArtistId, url: &str) -> ArtistUrl {
         use schema::artist_urls;
 

@@ -1,8 +1,8 @@
 use juniper::ID;
 
 use graphql::Context;
-use models::{Album, ArtistKind, Artist, ArtistName};
-use repositories::{AlbumRepository, ArtistNameRepository};
+use models::{Album, ArtistKind, Artist, ArtistName, ArtistUrl};
+use repositories::{AlbumRepository, ArtistNameRepository, ArtistUrlRepository};
 
 graphql_enum!(ArtistKind {
     ArtistKind::Person => "PERSON",
@@ -35,6 +35,12 @@ graphql_object!(Artist: Context |&self| {
     field albums(&executor) -> Vec<Album> {
         let ctx = executor.context();
         let repo = AlbumRepository::new(ctx.connection());
+        repo.find_by_artist_id(self.id)
+    }
+
+    field urls(&executor) -> Vec<ArtistUrl> {
+        let ctx = executor.context();
+        let repo = ArtistUrlRepository::new(ctx.connection());
         repo.find_by_artist_id(self.id)
     }
 });
