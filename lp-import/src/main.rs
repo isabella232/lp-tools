@@ -12,7 +12,7 @@ use futures_cpupool::CpuPool;
 use glob::glob;
 use rand::{thread_rng, Rng};
 use std::env;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::prelude::*;
 use std::path::Path;
 use toml::Value;
@@ -60,7 +60,11 @@ fn read_toml<F>(pattern: &str, mut callback: F)
 fn main() {
     let args: Vec<String> = env::args().collect();
     let pathname = args.get(1).expect("missing working directory");
-    let with_attachments = args.get(2).map(|v| v == "1").unwrap_or(false);
+    let store_dir = args.get(2).cloned();
+
+    if let Some(ref dst) = store_dir {
+        fs::create_dir_all(dst).expect("failed to create store_dir");
+    }
 
     let pool = CpuPool::new_num_cpus();
     let mut tasks = Vec::new();
@@ -79,29 +83,6 @@ fn main() {
             let start = prefix.len();
             let end = path.len() - suffix.len();
             let id = &path[start..end];
-
-            if with_attachments{
-                let task = {
-                    let id = id.to_string();
-                    let pathname = pathname.to_string();
-
-                    pool.spawn_fn(move || {
-                        let res: Result<(), ()> = Ok(());
-                        let src = format!("{}/-attachments/artists/{}.jpg", pathname, id);
-
-                        if !Path::new(&src).exists() {
-                            return res;
-                        }
-
-                        let dst = format!("tmp/{}-{}.jpg", generate_id(), id);
-                        lp_magick::resize(src, dst, 256, 256);
-
-                        res
-                    })
-                };
-
-                tasks.push(task);
-            }
 
             let artist = readers::artist::create(&ctx, &value);
             ctx.artists.insert(String::from(id), artist);
@@ -142,8 +123,10 @@ fn main() {
                 ctx.media.insert(medium_id, medium);
             }
 
-            if with_attachments {
+            if let Some(ref dst_prefix) = store_dir {
                 let id = id.to_string();
+                let release_id = release.id;
+                let dst_prefix = dst_prefix.clone();
                 let pathname = pathname.to_string();
                 let disambiguation = disambiguation.to_string();
 
@@ -155,8 +138,8 @@ fn main() {
                         panic!("missing artwork: {}", src);
                     }
 
-                    let dst = format!("tmp/{}-{}.jpg", generate_id(), id);
-                    lp_magick::resize(src, dst, 256, 256);
+                    let dst = format!("{}/{}.jpg", dst_prefix, release_id);
+                    fs::copy(src, dst).expect("artwork copy failed");
 
                     res
                 });
