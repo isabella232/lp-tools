@@ -4,4 +4,5 @@ members = [
   "lp-import",
   "lp-magick",
   "lp-server",
+  "lp-tag",
 ]
