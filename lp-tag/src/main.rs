@@ -2,8 +2,9 @@ extern crate glob;
 extern crate lp_tag;
 
 use glob::glob;
-use lp_tag::File;
+use lp_tag::{File, TextIdentificationFrame};
 use lp_tag::api::fetch_release;
+use lp_tag::ffi::StringType;
 use std::env;
 
 fn main() {
@@ -50,6 +51,10 @@ fn main() {
         tag.set_album(&release.album.default_name());
         tag.set_genre(genre);
         tag.set_year(year);
+
+        let trck = TextIdentificationFrame::new("TRCK", StringType::Latin1);
+        trck.set_text(&format!("{}/{}", track.position, tracks.len()));
+        tag.add_frame(&trck);
 
         file.save();
     }

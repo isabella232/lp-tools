@@ -4,7 +4,7 @@ extern crate serde;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate serde_json;
 
-pub use taglib::File;
+pub use taglib::{File, TextIdentificationFrame};
 
 pub mod api;
 pub mod ffi;
@@ -98,8 +98,6 @@ impl Release {
             .expect("invalid release date")
     }
 }
-
-
 
 #[derive(Debug, Deserialize)]
 pub struct Medium {

@@ -23,7 +23,7 @@ impl File {
     }
 
     pub fn tag(&self) -> Tag {
-        let ptr = unsafe { ffi::taglib_file_tag(self.ptr) };
+        let ptr = unsafe { ffi::taglib_file_id3v2_tag(self.ptr) };
         Tag { ptr: ptr }
     }
 }
@@ -39,6 +39,10 @@ pub struct Tag {
 }
 
 impl Tag {
+    pub fn add_frame(&self, frame: &Frame) {
+        unsafe { ffi::taglib_tag_add_frame(self.ptr, frame.as_frame_ptr()); }
+    }
+
     pub fn set_title(&self, value: &str) {
         let title = CString::new(value).unwrap();
         unsafe { ffi::taglib_tag_set_title(self.ptr, title.as_ptr()); }
@@ -61,5 +65,45 @@ impl Tag {
 
     pub fn set_year(&self, year: u32) {
         unsafe { ffi::taglib_tag_set_year(self.ptr, year); }
+    }
+}
+
+pub trait Frame {
+    fn as_frame_ptr(&self) -> *mut ffi::Frame;
+}
+
+pub struct TextIdentificationFrame {
+    ptr: *mut ffi::TextIdentificationFrame,
+}
+
+impl TextIdentificationFrame {
+    pub fn new(id: &str, encoding: ffi::StringType) -> TextIdentificationFrame {
+        let id = CString::new(id).unwrap();
+
+        let ptr = unsafe {
+            ffi::taglib_id3v2_text_identification_frame_new(
+                id.as_ptr(),
+                encoding,
+            )
+        };
+
+        TextIdentificationFrame { ptr: ptr }
+    }
+
+    pub fn set_text(&self, value: &str) {
+        let text = CString::new(value).unwrap();
+
+        unsafe {
+            ffi::taglib_id3v2_text_identification_frame_set_text(
+                self.ptr,
+                text.as_ptr(),
+            );
+        }
+    }
+}
+
+impl Frame for TextIdentificationFrame {
+    fn as_frame_ptr(&self) -> *mut ffi::Frame {
+        self.ptr as *mut ffi::Frame
     }
 }
