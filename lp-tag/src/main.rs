@@ -2,9 +2,9 @@ extern crate glob;
 extern crate lp_tag;
 
 use glob::glob;
-use lp_tag::{File, TextIdentificationFrame};
+use lp_tag::{AttachedPictureFrame, File, TextIdentificationFrame};
 use lp_tag::api::fetch_release;
-use lp_tag::ffi::StringType;
+use lp_tag::ffi::{PictureType, StringType};
 use std::env;
 
 fn main() {
@@ -34,6 +34,7 @@ fn main() {
             entries.len());
     }
 
+    let artwork = release.artwork();
     let genre = release.guess_genre();
     let year = release.year();
 
@@ -55,6 +56,12 @@ fn main() {
         let trck = TextIdentificationFrame::new("TRCK", StringType::Latin1);
         trck.set_text(&format!("{}/{}", track.position, tracks.len()));
         tag.add_frame(&trck);
+
+        let apic = AttachedPictureFrame::new();
+        apic.set_mime_type("image/jpeg");
+        apic.set_type(PictureType::FrontCover);
+        apic.set_picture(&artwork);
+        tag.add_frame(&apic);
 
         file.save();
     }

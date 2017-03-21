@@ -1,9 +1,19 @@
 use libc::{c_char, c_uint};
 
+pub enum AttachedPictureFrame {}
 pub enum File {}
 pub enum Frame {}
 pub enum Tag {}
 pub enum TextIdentificationFrame {}
+
+#[repr(C)]
+pub enum PictureType {
+    Other,
+    FileIcon,
+    OtherFileIcon,
+    FrontCover,
+    // ...
+}
 
 #[repr(C)]
 pub enum StringType {
@@ -28,6 +38,11 @@ extern {
     pub fn taglib_tag_set_album(tag: *mut Tag, value: *const c_char);
     pub fn taglib_tag_set_genre(tag: *mut Tag, value: *const c_char);
     pub fn taglib_tag_set_year(tag: *mut Tag, value: c_uint);
+
+    pub fn taglib_id3v2_attached_picture_frame_new() -> *mut AttachedPictureFrame;
+    pub fn taglib_id3v2_attached_picture_frame_set_mime_type(frame: *mut AttachedPictureFrame, value: *const c_char);
+    pub fn taglib_id3v2_attached_picture_frame_set_picture(frame: *mut AttachedPictureFrame, data: *const c_char, len: c_uint);
+    pub fn taglib_id3v2_attached_picture_frame_set_type(frame: *mut AttachedPictureFrame, value: PictureType);
 
     pub fn taglib_id3v2_text_identification_frame_new(id: *const c_char, encoding: StringType) -> *mut TextIdentificationFrame;
     pub fn taglib_id3v2_text_identification_frame_set_text(frame: *mut TextIdentificationFrame, value: *const c_char);

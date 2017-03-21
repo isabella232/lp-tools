@@ -72,6 +72,47 @@ pub trait Frame {
     fn as_frame_ptr(&self) -> *mut ffi::Frame;
 }
 
+pub struct AttachedPictureFrame {
+    ptr: *mut ffi::AttachedPictureFrame,
+}
+
+impl AttachedPictureFrame {
+    pub fn new() -> AttachedPictureFrame {
+        let ptr = unsafe { ffi::taglib_id3v2_attached_picture_frame_new() };
+        AttachedPictureFrame { ptr: ptr }
+    }
+
+    pub fn set_mime_type(&self, value: &str) {
+        let mime_type = CString::new(value).unwrap();
+
+        unsafe {
+            ffi::taglib_id3v2_attached_picture_frame_set_mime_type(self.ptr, mime_type.as_ptr());
+        }
+    }
+
+    pub fn set_picture(&self, data: &[u8]) {
+        unsafe {
+            ffi::taglib_id3v2_attached_picture_frame_set_picture(
+                self.ptr,
+                data.as_ptr() as *const i8,
+                data.len() as u32,
+            );
+        }
+    }
+
+    pub fn set_type(&self, ty: ffi::PictureType) {
+        unsafe {
+            ffi::taglib_id3v2_attached_picture_frame_set_type(self.ptr, ty);
+        }
+    }
+}
+
+impl Frame for AttachedPictureFrame {
+    fn as_frame_ptr(&self) -> *mut ffi::Frame {
+        self.ptr as *mut ffi::Frame
+    }
+}
+
 pub struct TextIdentificationFrame {
     ptr: *mut ffi::TextIdentificationFrame,
 }

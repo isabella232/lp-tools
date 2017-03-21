@@ -4,7 +4,9 @@ extern crate serde;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate serde_json;
 
-pub use taglib::{File, TextIdentificationFrame};
+use std::io::Read;
+
+pub use taglib::{AttachedPictureFrame, File, TextIdentificationFrame};
 
 pub mod api;
 pub mod ffi;
@@ -82,6 +84,16 @@ pub struct Release {
 }
 
 impl Release {
+    pub fn artwork(&self) -> Vec<u8> {
+        let url = format!("http://localhost:8000{}", self.artwork_url);
+        let mut response = reqwest::get(&url).unwrap();
+
+        let mut data = Vec::new();
+        response.read_to_end(&mut data).unwrap();;
+
+        data
+    }
+
     pub fn guess_genre(&self) -> &'static str {
         match self.country.as_ref() {
             "JP" => "Japanese Pop",
