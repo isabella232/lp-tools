@@ -13,6 +13,7 @@ pub struct Release {
     pub country: Option<String>,
     pub catalog_number: Option<String>,
     pub disambiguation: Option<String>,
+    pub artwork_data: Option<String>,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
@@ -25,6 +26,7 @@ pub struct NewRelease<'a> {
     pub country: Option<&'a str>,
     pub catalog_number: Option<&'a str>,
     pub disambiguation: Option<&'a str>,
+    pub artwork_data: Option<String>,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }

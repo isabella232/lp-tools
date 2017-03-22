@@ -30,6 +30,7 @@ impl<'a> ReleaseRepository<'a> {
             country: country,
             catalog_number: catalog_number,
             disambiguation: disambiguation,
+            artwork_data: None,
             created_at: now,
             updated_at: now,
         };
