@@ -57,6 +57,17 @@ fn read_toml<F>(pattern: &str, mut callback: F)
     }
 }
 
+fn medium_kind_to_label(kind: i32) -> &'static str {
+    match kind {
+        0 => "cd",
+        1 => "dvd",
+        2 => "blu-ray",
+        3 => "digital",
+        4 => "vinyl",
+        _ => unreachable!(),
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     let pathname = args.get(1).expect("missing working directory");
@@ -109,16 +120,10 @@ fn main() {
                 String::from("default")
             };
 
-            for medium in media {
-                let medium_kind = match medium.kind {
-                    0 => "cd",
-                    1 => "dvd",
-                    2 => "blu-ray",
-                    3 => "digital",
-                    4 => "vinyl",
-                    _ => unreachable!(),
-                };
+            let first_format = medium_kind_to_label(media[0].kind);
 
+            for medium in media {
+                let medium_kind = medium_kind_to_label(medium.kind);
                 let medium_id = format!("{}/{}/{}{}", id, disambiguation, medium_kind, medium.position);
                 ctx.media.insert(medium_id, medium);
             }
@@ -132,10 +137,14 @@ fn main() {
 
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());
-                    let src = format!("{}/-attachments/albums/{}/{}.jpg", pathname, id, disambiguation);
+                    let mut src = format!("{}/-attachments/albums/{}/{}-{}.jpg", pathname, id, disambiguation, first_format);
 
                     if !Path::new(&src).exists() {
-                        panic!("missing artwork: {}", src);
+                        src = format!("{}/-attachments/albums/{}/{}.jpg", pathname, id, disambiguation);
+
+                        if !Path::new(&src).exists() {
+                            panic!("missing artwork: {}", src);
+                        }
                     }
 
                     let dst = format!("{}/{}.jpg", dst_prefix, release_id);
