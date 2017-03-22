@@ -8,7 +8,10 @@ static QUERY: &'static str = r#"
         release(id: $id) {
             country
             releasedOn
-            artworkUrl
+
+            artworkUrls {
+                original
+            }
 
             album {
                 names {

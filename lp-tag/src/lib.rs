@@ -73,20 +73,25 @@ pub struct AlbumName {
     pub is_default: bool,
 }
 
+
+#[derive(Debug, Deserialize)]
+pub struct ArtworkUrls {
+    pub original: String,
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Release {
     pub country: String,
     pub released_on: String,
-    pub artwork_url: String,
+    pub artwork_urls: ArtworkUrls,
     pub album: Album,
     pub media: Vec<Medium>,
 }
 
 impl Release {
     pub fn artwork(&self) -> Vec<u8> {
-        let url = format!("http://localhost:8000{}", self.artwork_url);
-        let mut response = reqwest::get(&url).unwrap();
+        let mut response = reqwest::get(&self.artwork_urls.original).unwrap();
 
         let mut data = Vec::new();
         response.read_to_end(&mut data).unwrap();;
