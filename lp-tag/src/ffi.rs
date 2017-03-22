@@ -3,6 +3,7 @@ use libc::{c_char, c_uint};
 pub enum AttachedPictureFrame {}
 pub enum File {}
 pub enum Frame {}
+pub enum FrameFactory {}
 pub enum Tag {}
 pub enum TextIdentificationFrame {}
 
@@ -38,6 +39,9 @@ extern {
     pub fn taglib_tag_set_album(tag: *mut Tag, value: *const c_char);
     pub fn taglib_tag_set_genre(tag: *mut Tag, value: *const c_char);
     pub fn taglib_tag_set_year(tag: *mut Tag, value: c_uint);
+
+    pub fn taglib_id3v2_frame_factory_instance() -> *mut FrameFactory;
+    pub fn taglib_id3v2_frame_factory_set_default_text_encoding(factory: *mut FrameFactory, encoding: StringType);
 
     pub fn taglib_id3v2_attached_picture_frame_new() -> *mut AttachedPictureFrame;
     pub fn taglib_id3v2_attached_picture_frame_set_mime_type(frame: *mut AttachedPictureFrame, value: *const c_char);

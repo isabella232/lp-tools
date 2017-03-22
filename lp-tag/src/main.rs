@@ -2,7 +2,7 @@ extern crate glob;
 extern crate lp_tag;
 
 use glob::glob;
-use lp_tag::{AttachedPictureFrame, File, TextIdentificationFrame};
+use lp_tag::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 use lp_tag::api::fetch_release;
 use lp_tag::ffi::{PictureType, StringType};
 use std::env;
@@ -33,6 +33,8 @@ fn main() {
             tracks.len(),
             entries.len());
     }
+
+    FrameFactory::instance().set_default_text_encoding(StringType::UTF16);
 
     let artwork = release.artwork();
     let genre = release.guess_genre();

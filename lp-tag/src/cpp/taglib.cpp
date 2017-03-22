@@ -60,6 +60,14 @@ void taglib_tag_set_year(TagLib::ID3v2::Tag *tag, unsigned int year) {
   return tag->setYear(year);
 }
 
+TagLib::ID3v2::FrameFactory *taglib_id3v2_frame_factory_instance() {
+  return TagLib::ID3v2::FrameFactory::instance();
+}
+
+void taglib_id3v2_frame_factory_set_default_text_encoding(TagLib::ID3v2::FrameFactory *factory, TagLib::String::Type encoding) {
+  factory->setDefaultTextEncoding(encoding);
+}
+
 TagLib::ID3v2::AttachedPictureFrame *taglib_id3v2_attached_picture_frame_new() {
   return new TagLib::ID3v2::AttachedPictureFrame();
 }

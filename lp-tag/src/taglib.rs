@@ -68,6 +68,23 @@ impl Tag {
     }
 }
 
+pub struct FrameFactory {
+    ptr: *mut ffi::FrameFactory,
+}
+
+impl FrameFactory {
+    pub fn instance() -> FrameFactory {
+        let ptr = unsafe { ffi::taglib_id3v2_frame_factory_instance() };
+        FrameFactory { ptr: ptr }
+    }
+
+    pub fn set_default_text_encoding(&self, encoding: ffi::StringType) {
+        unsafe {
+            ffi::taglib_id3v2_frame_factory_set_default_text_encoding(self.ptr, encoding);
+        }
+    }
+}
+
 pub trait Frame {
     fn as_frame_ptr(&self) -> *mut ffi::Frame;
 }
