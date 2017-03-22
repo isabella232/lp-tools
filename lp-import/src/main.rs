@@ -1,5 +1,6 @@
 extern crate diesel;
-extern crate glob; extern crate lp;
+extern crate glob;
+extern crate lp;
 extern crate lp_import;
 extern crate lp_magick;
 extern crate toml;
@@ -7,9 +8,12 @@ extern crate futures;
 extern crate futures_cpupool;
 extern crate rand;
 
+use diesel::prelude::*;
 use futures::Future;
 use futures_cpupool::CpuPool;
 use glob::glob;
+use lp::models::ReleaseId;
+use lp_magick::resize;
 use rand::{thread_rng, Rng};
 use std::env;
 use std::fs::{self, File};
@@ -66,6 +70,26 @@ fn medium_kind_to_label(kind: i32) -> &'static str {
         4 => "vinyl",
         _ => unreachable!(),
     }
+}
+
+fn update_release_artwork_data(release_id: ReleaseId,
+                               original_id: &str,
+                               thumbnail_id: &str)
+{
+    use lp::schema::releases::dsl::*;
+
+    let ctx = Context::new();
+
+    let data = format!(
+        r#"{{"original":{{"id":"{}"}},"thumbnail":{{"id":"{}"}}}}"#,
+        original_id,
+        thumbnail_id,
+    );
+
+    diesel::update(releases.find(release_id))
+        .set(artwork_data.eq(&data))
+        .execute(ctx.connection())
+        .unwrap();
 }
 
 fn main() {
@@ -135,6 +159,9 @@ fn main() {
                 let pathname = pathname.to_string();
                 let disambiguation = disambiguation.to_string();
 
+                let original_id = generate_id();
+                let thumbnail_id = generate_id();
+
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());
                     let mut src = format!("{}/-attachments/albums/{}/{}-{}.jpg", pathname, id, disambiguation, first_format);
@@ -147,8 +174,13 @@ fn main() {
                         }
                     }
 
-                    let dst = format!("{}/{}.jpg", dst_prefix, release_id);
-                    fs::copy(src, dst).expect("artwork copy failed");
+                    let dst = format!("{}/{}.jpg", dst_prefix, original_id);
+                    fs::copy(&src, &dst).expect("artwork copy failed");
+
+                    let dst = format!("{}/{}.jpg", dst_prefix, thumbnail_id);
+                    resize(&src, &dst, 256, 256);
+
+                    update_release_artwork_data(release_id, &original_id, &thumbnail_id);
 
                     res
                 });
