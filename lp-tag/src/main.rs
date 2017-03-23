@@ -44,7 +44,6 @@ fn main() {
     let working_dir = args.get(2).expect("missing working dir");
 
     let release = fetch_release(release_id);
-    println!("{:?}", release);
 
     let disc_number = 1;
     let medium = release.media.iter()
@@ -73,8 +72,6 @@ fn main() {
     let year = release.year();
 
     for (pathname, track) in entries.iter().zip(tracks.iter()) {
-        println!("{:?}", pathname);
-
         let path = pathname.to_str().unwrap();
         let file = File::new(path);
         file.strip();
