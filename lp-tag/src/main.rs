@@ -1,11 +1,42 @@
 extern crate glob;
+#[macro_use] extern crate lazy_static;
 extern crate lp_tag;
+extern crate regex;
+extern crate unidecode;
 
 use glob::glob;
 use lp_tag::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 use lp_tag::api::fetch_release;
 use lp_tag::ffi::{PictureType, StringType};
-use std::env;
+use regex::Regex;
+use std::{env, fs};
+use std::path::PathBuf;
+use unidecode::unidecode;
+
+fn sanitize_pathname(s: &str) -> String {
+    lazy_static! {
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx
+        static ref RESERVED_CHARACTERS: Regex = Regex::new(r#"[<>:"/\\|?*]"#).unwrap();
+        static ref TRAILING_DOTS: Regex = Regex::new(r"\.+$").unwrap();
+    }
+
+    let s = unidecode(s);
+    let s = s.replace("/", "_");
+    let s = RESERVED_CHARACTERS.replace_all(&s, "");
+    let s = TRAILING_DOTS.replace_all(&s, "");
+
+    s.into_owned()
+}
+
+#[test]
+fn test_sanitize_pathname() {
+    assert_eq!(sanitize_pathname("foo bar.mp3"), "foo bar.mp3");
+    assert_eq!(sanitize_pathname("foo / bar"), "foo _ bar");
+    assert_eq!(sanitize_pathname(r#"a<b>c:d"e/f\g|h?i*"#), "abcde_fghi");
+    assert_eq!(sanitize_pathname("foo."), "foo");
+    assert_eq!(sanitize_pathname("foo.."), "foo");
+    assert_eq!(sanitize_pathname("foo..."), "foo");
+}
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -37,21 +68,24 @@ fn main() {
     FrameFactory::instance().set_default_text_encoding(StringType::UTF16);
 
     let artwork = release.artwork();
+    let album = release.album.default_name();
     let genre = release.guess_genre();
     let year = release.year();
 
     for (pathname, track) in entries.iter().zip(tracks.iter()) {
-        let pathname = pathname.to_str().unwrap();
-        println!("{}", pathname);
+        println!("{:?}", pathname);
 
-        let file = File::new(&pathname);
+        let path = pathname.to_str().unwrap();
+        let file = File::new(path);
         file.strip();
 
         let tag = file.tag();
 
-        tag.set_title(&track.default_name());
+        let title = track.default_name();
+
+        tag.set_title(&title);
         tag.set_artist(&track.artist_credit.default_name());
-        tag.set_album(&release.album.default_name());
+        tag.set_album(&album);
         tag.set_genre(genre);
         tag.set_year(year);
 
@@ -66,5 +100,21 @@ fn main() {
         tag.add_frame(&apic);
 
         file.save();
+
+        let mut dst = pathname.clone();
+        dst.pop();
+        let basename = sanitize_pathname(&title);
+        dst.push(&format!("{:02} {}.mp3", track.position, basename));
+
+        fs::rename(&pathname, &dst).unwrap();
     }
+
+    let mut dst = PathBuf::from(working_dir);
+    dst.pop();
+    let release_date = release.released_on.replace("-", ".");
+    let name = sanitize_pathname(&album);
+    dst.push(&format!("[{}] {}", release_date, name));
+
+    fs::rename(working_dir, &dst).unwrap();
+
 }
