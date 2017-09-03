@@ -181,11 +181,14 @@ mod tests {
     fn build_release() -> Release {
         let artist_credit = ArtistCredit { names: vec![] };
         let album = Album { artist_credit: artist_credit, names: vec![] };
+        let artwork_urls = ArtworkUrls {
+            original: "http://localhost/artwork.jpg".into(),
+        };
 
         Release {
             country: "KR".into(),
             released_on: "2017-03-13".into(),
-            artwork_url: "http://localhost/artwork.jpg".into(),
+            artwork_urls: artwork_urls,
             album: album,
             media: vec![],
         }
