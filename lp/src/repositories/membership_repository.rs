@@ -1,7 +1,6 @@
-use chrono::UTC;
-use diesel::pg::PgConnection;
+use chrono::Utc;
+use diesel::{self, PgConnection};
 use diesel::prelude::*;
-use diesel;
 
 use ::PartialDate;
 use models::{ArtistId, ArtistCreditId, Membership, NewMembership};
@@ -27,7 +26,7 @@ impl<'a> MembershipRepository<'a> {
         let started_on = started_on.unwrap_or(PartialDate::default());
         let ended_on = ended_on.unwrap_or(PartialDate::default());
 
-        let now = UTC::now().naive_utc();
+        let now = Utc::now().naive_utc();
 
         let new_membership = NewMembership {
             group_id: artist_id,
@@ -42,8 +41,8 @@ impl<'a> MembershipRepository<'a> {
             updated_at: now,
         };
 
-        diesel::insert(&new_membership)
-            .into(memberships::table)
+        diesel::insert_into(memberships::table)
+            .values(&new_membership)
             .get_result(self.connection)
             .expect("Error creating new membership")
     }

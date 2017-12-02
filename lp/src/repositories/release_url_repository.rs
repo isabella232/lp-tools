@@ -1,7 +1,6 @@
-use chrono::UTC;
-use diesel::pg::PgConnection;
+use chrono::Utc;
+use diesel::{self, PgConnection};
 use diesel::prelude::*;
-use diesel;
 
 use models::{ReleaseId, ReleaseUrl, NewReleaseUrl};
 
@@ -17,7 +16,7 @@ impl<'a> ReleaseUrlRepository<'a> {
     pub fn create(&self, release_id: ReleaseId, url: &str) -> ReleaseUrl {
         use schema::release_urls;
 
-        let now = UTC::now().naive_utc();
+        let now = Utc::now().naive_utc();
 
         let new_release_url = NewReleaseUrl {
             release_id: release_id,
@@ -27,8 +26,8 @@ impl<'a> ReleaseUrlRepository<'a> {
             updated_at: now,
         };
 
-        diesel::insert(&new_release_url)
-            .into(release_urls::table)
+        diesel::insert_into(release_urls::table)
+            .values(&new_release_url)
             .get_result(self.connection)
             .expect("Error creating new release url")
     }

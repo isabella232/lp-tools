@@ -1,6 +1,9 @@
+// increase limit for `infer_schema!`
+#![recursion_limit="128"]
+
 extern crate chrono;
 #[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_codegen;
+#[macro_use] extern crate diesel_infer_schema;
 extern crate dotenv;
 #[macro_use] extern crate juniper;
 #[macro_use] extern crate lazy_static;

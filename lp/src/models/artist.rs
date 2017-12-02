@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 use std::str::FromStr;
 
-use schema::{artists, artist_names};
+use schema::artists;
 
 pub type ArtistId = i32;
 
@@ -34,7 +34,6 @@ impl FromStr for ArtistKind {
 }
 
 #[derive(Associations, Debug, Identifiable, Queryable)]
-#[has_many(artist_names)]
 pub struct Artist {
     pub id: ArtistId,
     pub kind: i32,

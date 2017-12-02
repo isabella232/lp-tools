@@ -1,7 +1,6 @@
-use chrono::{NaiveDate, UTC};
-use diesel::pg::PgConnection;
+use chrono::{NaiveDate, Utc};
+use diesel::{self, PgConnection};
 use diesel::prelude::*;
-use diesel;
 
 use models::{AlbumId, Release, NewRelease};
 
@@ -22,7 +21,7 @@ impl<'a> ReleaseRepository<'a> {
                   disambiguation: Option<&str>) -> Release {
         use schema::releases;
 
-        let now = UTC::now().naive_utc();
+        let now = Utc::now().naive_utc();
 
         let new_release = NewRelease {
             album_id: album_id,
@@ -35,8 +34,8 @@ impl<'a> ReleaseRepository<'a> {
             updated_at: now,
         };
 
-        diesel::insert(&new_release)
-            .into(releases::table)
+        diesel::insert_into(releases::table)
+            .values(&new_release)
             .get_result(self.connection)
             .expect("Error creating new release")
     }

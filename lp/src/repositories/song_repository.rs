@@ -1,7 +1,6 @@
-use chrono::UTC;
-use diesel::pg::PgConnection;
+use chrono::Utc;
+use diesel::{self, PgConnection};
 use diesel::prelude::*;
-use diesel;
 
 use models::{Song, ArtistCreditId, NewSong};
 
@@ -17,7 +16,7 @@ impl<'a> SongRepository<'a> {
     pub fn create(&self, artist_credit_id: ArtistCreditId) -> Song {
         use schema::songs;
 
-        let now = UTC::now().naive_utc();
+        let now = Utc::now().naive_utc();
 
         let new_song = NewSong {
             artist_credit_id: artist_credit_id,
@@ -25,8 +24,8 @@ impl<'a> SongRepository<'a> {
             updated_at: now,
         };
 
-        diesel::insert(&new_song)
-            .into(songs::table)
+        diesel::insert_into(songs::table)
+            .values(&new_song)
             .get_result(self.connection)
             .expect("Error creating new song")
     }
