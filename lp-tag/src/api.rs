@@ -54,7 +54,7 @@ static QUERY: &'static str = r#"
 "#;
 
 pub fn fetch_release(id: i32) -> Release {
-    let client = Client::new().unwrap();
+    let client = Client::new();
 
     let payload = json!({
         "query": QUERY,
