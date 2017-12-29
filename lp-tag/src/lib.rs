@@ -103,6 +103,7 @@ impl Release {
         match self.country.as_ref() {
             "JP" => "Japanese Pop",
             "KR" => "Korean Pop",
+            "CN" => "Chinese Pop",
             _ => panic!("unknown country"),
         }
     }
