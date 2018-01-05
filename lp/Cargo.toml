@@ -5,10 +5,10 @@ authors = ["Michael Macias <zaeleus@gmail.com>"]
 
 [dependencies]
 chrono = "0.4.0"
-diesel = { version = "0.99.0", features = ["chrono", "postgres"] }
-diesel_infer_schema = { version = "0.99.0", features = ["postgres"] }
+diesel = { version = "1.0.0", features = ["chrono", "postgres"] }
+diesel_infer_schema = { version = "1.0.0", features = ["postgres"] }
 dotenv = "0.10.1"
 juniper = "0.6.2"
 lazy_static = "0.2.2"
 r2d2 = "0.8.1"
-r2d2-diesel = "0.99.0"
+r2d2-diesel = "1.0.0"
