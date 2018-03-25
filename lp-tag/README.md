@@ -1,7 +1,14 @@
 # lp-tag
 
-**lp-tag** uses metadata from lp to tag a directory of music files.
+**lp-tag** uses metadata from lp to write ID3v2.3 tags to a directory of audio
+files.
 
-# Usage
+## Prerequisites
+
+  * [taglib] >= 1.8
+
+[taglib]: http://taglib.org/
+
+## Usage
 
     $ lp-tag <release-id> <working-dir>
