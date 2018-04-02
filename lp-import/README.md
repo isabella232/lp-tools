@@ -4,4 +4,4 @@
 
 # Usage
 
-    $ lp-import <input-dir> <artwork-output-dir>
+    $ lp-import <input-dir> [artwork-output-dir]
