@@ -2,32 +2,42 @@ use lp::models::{Artist, ArtistKind};
 use lp::repositories::{ArtistRepository, ArtistNameRepository, ArtistUrlRepository};
 use toml::Value;
 
-use ::{Context, readers};
+use ::Context;
+use ::readers::{self, Error};
 
-pub fn create(ctx: &Context, root: &Value) -> Artist {
-    let artist = new(ctx, root);
-    names(ctx, root, &artist);
+pub fn create(ctx: &Context, root: &Value) -> Result<Artist, Error> {
+    let artist = new(ctx, root)?;
+
+    names(ctx, root, &artist)?;
 
     if let Some(array) = root.get("urls") {
-        urls(ctx, array, &artist);
+        urls(ctx, array, &artist)?;
     }
 
     if let Some(array) = root.get("members") {
-        members(ctx, array, &artist);
+        members(ctx, array, &artist)?;
     }
 
-    artist
+    Ok(artist)
 }
 
-fn new(ctx: &Context, root: &Value) -> Artist {
+fn new(ctx: &Context, root: &Value) -> Result<Artist, Error> {
     let kind = root.get("kind")
         .and_then(Value::as_str)
-        .and_then(|s| s.parse::<ArtistKind>().ok())
-        .expect("invalid artist.kind");
+        .ok_or_else(|| {
+            Error::Parse(String::from("expected artist.kind to be a string"))
+        })
+        .and_then(|s| {
+            s.parse::<ArtistKind>().map_err(|_| {
+                Error::Parse(format!("invalid artist.kind ({})", s))
+            })
+        })?;
 
     let country = root.get("country")
         .and_then(Value::as_str)
-        .expect("invalid artist.country");
+        .ok_or_else(|| {
+            Error::Parse(String::from("invalid artist.country"))
+        })?;
 
     let started_on = root.get("started-on")
         .and_then(Value::as_str)
@@ -40,38 +50,75 @@ fn new(ctx: &Context, root: &Value) -> Artist {
     let disambiguation = root.get("disambiguation").and_then(Value::as_str);
 
     let repo = ArtistRepository::new(ctx.connection());
-    repo.create(kind as i32, country, started_on, ended_on, disambiguation)
+    let artist = repo.create(kind as i32, country, started_on, ended_on, disambiguation);
+
+    Ok(artist)
 }
 
-fn names(ctx: &Context, root: &Value, artist: &Artist) {
+fn names(ctx: &Context, root: &Value, artist: &Artist) -> Result<(), Error> {
     let repo = ArtistNameRepository::new(ctx.connection());
-    let values = root.get("names").and_then(Value::as_array).expect("artist.names is not an array");
 
-    for value in values {
-        let name = value.get("name").and_then(Value::as_str).expect("artist.names[_].name is not a string");
-        let locale = value.get("locale").and_then(Value::as_str).expect("artist.names[_].locale is not a string");
-        let default = value.get("default").and_then(Value::as_bool).unwrap_or(false);
-        let original = value.get("original").and_then(Value::as_bool).unwrap_or(false);
+    let values = root.get("names")
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            Error::Parse(String::from("expected artist.names to be an array"))
+        })?;
+
+    for (i, value) in values.iter().enumerate() {
+        let name = value.get("name")
+            .and_then(Value::as_str)
+            .ok_or_else(|| {
+                Error::Parse(format!("expected artist.names[{}].name to be a string", i))
+            })?;
+
+        let locale = value.get("locale")
+            .and_then(Value::as_str)
+            .ok_or_else(|| {
+                Error::Parse(format!("expected artist.names[{}].locale to be a string", i))
+            })?;
+
+        let default = value.get("default")
+            .and_then(Value::as_bool)
+            .unwrap_or(false);
+
+        let original = value.get("original")
+            .and_then(Value::as_bool)
+            .unwrap_or(false);
 
         repo.create(artist.id, name, locale, default, original);
     }
+
+    Ok(())
 }
 
-fn members(ctx: &Context, array: &Value, artist: &Artist) {
-    let values = array.as_array().expect("artist.members is not an array");
+fn members(ctx: &Context, array: &Value, artist: &Artist) -> Result<(), Error> {
+    let values = array.as_array().ok_or_else(|| {
+        Error::Parse(String::from("expected artist.members to be an array"))
+    })?;
 
     for value in values {
-        readers::membership::create(ctx, value, artist);
+        readers::membership::create(ctx, value, artist)?;
     }
+
+    Ok(())
 }
 
-fn urls(ctx: &Context, array: &Value, artist: &Artist) {
+fn urls(ctx: &Context, array: &Value, artist: &Artist) -> Result<(), Error> {
     let repo = ArtistUrlRepository::new(ctx.connection());
-    let values = array.as_array().expect("artist.urls is not an array");
 
-    for value in values {
-        let url = value.get("url").and_then(Value::as_str).expect("artist.urls[_].url is not a string");
-        // let name = value.get("name").and_then(Value::as_str).expect("artist.urls[_].name is not a string");
+    let values = array.as_array().ok_or_else(|| {
+        Error::Parse(String::from("expected artist.urls to be an array"))
+    })?;
+
+    for (i, value) in values.iter().enumerate() {
+        let url = value.get("url")
+            .and_then(Value::as_str)
+            .ok_or_else(|| {
+                Error::Parse(format!("expected artist.urls[{}].url to be a string", i))
+            })?;
+
         repo.create(artist.id, url);
     }
+
+    Ok(())
 }

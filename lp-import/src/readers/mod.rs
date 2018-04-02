@@ -9,3 +9,9 @@ pub mod release;
 pub mod song;
 pub mod track;
 pub mod tracklist;
+
+#[derive(Debug)]
+pub enum Error {
+    Map(String),
+    Parse(String),
+}

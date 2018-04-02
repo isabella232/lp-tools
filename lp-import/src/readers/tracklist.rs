@@ -1,21 +1,40 @@
 use toml::Value;
 
-use ::{Context, readers};
+use ::Context;
+use ::readers::{self, Error};
 
-pub fn create(ctx: &Context, root: &Value) {
-    let values = root.get("medium-ids").and_then(Value::as_array).expect("medium-ids invalid");
+pub fn create(ctx: &Context, root: &Value) -> Result<(), Error> {
+    let values = root.get("medium-ids")
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            Error::Parse(String::from("expected tracklist.medium-ids to be an array"))
+        })?;
 
-    for value in values {
-        let id = value.as_str().expect("medium id not a string");
-        tracks(ctx, root, id);
+    for (i, value) in values.iter().enumerate() {
+        let id = value.as_str().ok_or_else(|| {
+            Error::Parse(format!("expected tracklist.medium-ids[{}] to be a string", i))
+        })?;
+
+        tracks(ctx, root, id, i)?;
     }
+
+    Ok(())
 }
 
-fn tracks(ctx: &Context, root: &Value, medium_id: &str) {
-    let values = root.get("tracks").and_then(Value::as_array).expect("tracks invalid");
-    let medium = ctx.media.get(medium_id.into()).expect("media missing");
+fn tracks(ctx: &Context, root: &Value, medium_id: &str, i: usize) -> Result<(), Error> {
+    let values = root.get("tracks")
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            Error::Parse(String::from("expected tracklist.tracks to be an array"))
+        })?;
+
+    let medium = ctx.media.get(medium_id.into()).ok_or_else(|| {
+        Error::Map(format!("invalid tracklist.medium-ids[{}] ({})", i, medium_id))
+    })?;
 
     for value in values {
-        readers::track::create(ctx, value, medium_id, medium);
+        readers::track::create(ctx, value, medium_id, medium)?;
     }
+
+    Ok(())
 }

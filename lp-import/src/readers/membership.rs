@@ -2,14 +2,15 @@ use lp::models::{Artist, Membership};
 use lp::repositories::MembershipRepository;
 use toml::Value;
 
-use ::{Context, readers};
+use ::Context;
+use ::readers::{self, Error};
 
-pub fn create(ctx: &Context, root: &Value, artist: &Artist) -> Membership {
+pub fn create(ctx: &Context, root: &Value, artist: &Artist) -> Result<Membership, Error> {
     new(ctx, root, artist)
 }
 
-fn new(ctx: &Context, root: &Value, artist: &Artist) -> Membership {
-    let artist_credit = readers::artist_credit::create(ctx, root);
+fn new(ctx: &Context, root: &Value, artist: &Artist) -> Result<Membership, Error> {
+    let artist_credit = readers::artist_credit::create(ctx, root)?;
 
     let started_on = root.get("started-on")
         .and_then(Value::as_str)
@@ -20,5 +21,7 @@ fn new(ctx: &Context, root: &Value, artist: &Artist) -> Membership {
         .and_then(|s| s.parse().ok());
 
     let repo = MembershipRepository::new(ctx.connection());
-    repo.create(artist.id, artist_credit.id, started_on, ended_on)
+    let membership = repo.create(artist.id, artist_credit.id, started_on, ended_on);
+
+    Ok(membership)
 }

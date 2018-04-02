@@ -114,12 +114,16 @@ fn main() {
         let pattern = format!("{}**/*{}", prefix, suffix);
 
         read_toml(&pattern, |path, value| {
-            let path = path.to_str().expect("path to str failed");
+            let path = path.to_str().unwrap();
             let start = prefix.len();
             let end = path.len() - suffix.len();
             let id = &path[start..end];
 
-            let artist = readers::artist::create(&ctx, &value);
+            let artist = match readers::artist::create(&ctx, &value) {
+                Ok(a) => a,
+                Err(e) => panic!("{}: {:?}", path, e),
+            };
+
             ctx.artists.insert(String::from(id), artist);
         });
     }
@@ -131,11 +135,14 @@ fn main() {
     let pattern = format!("{}**/*{}", prefix, suffix);
 
     read_toml(&pattern, |path, value| {
-        let path = path.to_str().expect("path to str failed");
+        let path = path.to_str().unwrap();
         let end = path.len() - suffix.len();
         let id = &path[start..end];
 
-        let (_, releases) = readers::album::create(&ctx, &value);
+        let (_, releases) = match readers::album::create(&ctx, &value) {
+            Ok(a) => a,
+            Err(e) => panic!("{}: {:?}", path, e),
+        };
 
         for (release, media) in releases {
             let disambiguation = if let Some(ref d) = release.disambiguation {
@@ -199,14 +206,18 @@ fn main() {
     read_toml(&pattern, |path, value| {
         let mut p = path.to_path_buf();
         p.pop();
-        let p = p.to_str().expect("path to str failed");
+        let p = p.to_str().unwrap();
         let artist_id = &p[start..];
 
-        let path = path.to_str().expect("path to str failed");
+        let path = path.to_str().unwrap();
         let end = path.len() - suffix.len();
         let id = &path[start..end];
 
-        let song = readers::song::create(&ctx, &value, artist_id);
+        let song = match readers::song::create(&ctx, &value, artist_id) {
+            Ok(s) => s,
+            Err(e) => panic!("{}: {:?}", path, e),
+        };
+
         ctx.songs.insert(String::from(id), song);
     });
 
@@ -214,8 +225,11 @@ fn main() {
 
     let pattern = format!("{}/tracklists/**/*.toml", pathname);
 
-    read_toml(&pattern, |_, value| {
-        readers::tracklist::create(&ctx, &value);
+    read_toml(&pattern, |path, value| {
+        if let Err(e) = readers::tracklist::create(&ctx, &value) {
+            let path = path.to_str().unwrap();
+            panic!("{}: {:?}", path, e);
+        }
     });
 
     // attachments

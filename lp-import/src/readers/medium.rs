@@ -3,21 +3,29 @@ use lp::repositories::MediumRepository;
 use toml::Value;
 
 use ::Context;
+use ::readers::Error;
 
-pub fn create(ctx: &Context, root: &Value, release: &Release, i: i16) -> Medium {
+pub fn create(ctx: &Context, root: &Value, release: &Release, i: i16) -> Result<Medium, Error> {
     let kind = root.get("kind")
         .and_then(Value::as_str)
-        .and_then(|s| s.parse::<MediumKind>().ok())
-        .expect("invalid medium kind");
+        .ok_or_else(|| {
+            Error::Parse(String::from("expected medium.kind to be a string"))
+        })
+        .and_then(|s| {
+            s.parse::<MediumKind>().map_err(|_| {
+                Error::Parse(format!("invalid medium.kind ({})", s))
+            })
+        })?;
 
-    let position = if let Some(p) = root.get("position").and_then(Value::as_integer) {
-        p as i16
-    } else {
-        i
-    };
+    let position = root.get("position")
+        .and_then(Value::as_integer)
+        .map(|p| p as i16)
+        .unwrap_or(i);
 
     let name = root.get("name").and_then(Value::as_str);
 
     let repo = MediumRepository::new(ctx.connection());
-    repo.create(release.id, kind as i32, position, name)
+    let medium = repo.create(release.id, kind as i32, position, name);
+
+    Ok(medium)
 }

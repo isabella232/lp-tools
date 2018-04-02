@@ -2,9 +2,10 @@ use lp::models::ArtistCredit;
 use lp::repositories::ArtistCreditRepository;
 use toml::value::{Table, Value};
 
-use ::{Context, readers};
+use ::Context;
+use ::readers::{self, Error};
 
-pub fn create(ctx: &Context, root: &Value) -> ArtistCredit {
+pub fn create(ctx: &Context, root: &Value) -> Result<ArtistCredit, Error> {
     if let Some(array) = root.get("artist-credits").and_then(Value::as_array) {
         new(ctx, array)
     } else if let Some(artist_id) = root.get("artist-id").and_then(Value::as_str) {
@@ -14,17 +15,17 @@ pub fn create(ctx: &Context, root: &Value) -> ArtistCredit {
         table.insert(key, value);
         new(ctx, &[Value::Table(table)])
     } else {
-        panic!("artist-credit or artist-id missing");
+        Err(Error::Parse(String::from("artist-credits or artist-id missing")))
     }
 }
 
-fn new(ctx: &Context, array: &[Value]) -> ArtistCredit {
+fn new(ctx: &Context, array: &[Value]) -> Result<ArtistCredit, Error> {
     let repo = ArtistCreditRepository::new(ctx.connection());
     let artist_credit = repo.create();
 
     for (i, value) in array.iter().enumerate() {
-        readers::artist_credit_name::create(ctx, value, &artist_credit, i as i16);
+        readers::artist_credit_name::create(ctx, value, &artist_credit, i as i16)?;
     }
 
-    artist_credit
+    Ok(artist_credit)
 }
