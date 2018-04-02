@@ -4,12 +4,6 @@ use graphql::Context;
 use models::{Album, AlbumKind, AlbumName, ArtistCredit};
 use repositories::{ArtistCreditRepository, AlbumNameRepository};
 
-graphql_enum!(AlbumKind {
-    AlbumKind::Single => "SINGLE",
-    AlbumKind::EP => "EP",
-    AlbumKind::LP => "LP",
-});
-
 graphql_object!(Album: Context |&self| {
     field id() -> ID {
         ID::from(format!("{}", self.id))

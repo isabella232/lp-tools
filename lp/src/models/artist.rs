@@ -5,7 +5,7 @@ use schema::artists;
 
 pub type ArtistId = i32;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, GraphQLEnum)]
 pub enum ArtistKind {
     Person,
     Group,

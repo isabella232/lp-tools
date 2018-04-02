@@ -1,22 +1,15 @@
-#![feature(plugin, custom_derive)]
+#![feature(plugin)]
 #![plugin(rocket_codegen)]
 
 extern crate juniper;
+extern crate juniper_rocket;
 #[macro_use] extern crate lazy_static;
 extern crate lp;
 extern crate rocket;
-extern crate rocket_contrib;
-extern crate serde;
-#[macro_use] extern crate serde_derive;
-extern crate serde_json;
 
-use graphql::{GraphQLQuery, GraphQLResult};
 use juniper::RootNode;
 use lp::graphql::{Context, MutationRoot, QueryRoot};
-use rocket::response::NamedFile;
-use std::io;
-
-mod graphql;
+use rocket::response::content;
 
 lazy_static! {
     static ref QUERY_ROOT: QueryRoot = QueryRoot;
@@ -27,26 +20,21 @@ lazy_static! {
 }
 
 #[get("/graphql?<query>")]
-fn graphql_get(query: GraphQLQuery) -> GraphQLResult {
+fn graphql_get(query: juniper_rocket::GraphQLRequest) -> juniper_rocket::GraphQLResponse {
     let context = Context::new();
     query.execute(&SCHEMA, &context)
 }
 
 #[post("/graphql", data = "<query>")]
-fn graphql_post(query: GraphQLQuery) -> GraphQLResult {
+fn graphql_post(query: juniper_rocket::GraphQLRequest) -> juniper_rocket::GraphQLResponse {
     let context = Context::new();
     query.execute(&SCHEMA, &context)
 }
 
 #[get("/")]
-fn graphiql() -> io::Result<NamedFile> {
-    NamedFile::open("static/graphiql.html")
+fn graphiql() -> content::Html<String> {
+    juniper_rocket::graphiql_source("/graphql")
 }
-
-/* #[route(OPTIONS, "/graphql")]
-fn graphql_options() -> Option<()> {
-    Some(())
-} */
 
 fn main() {
     rocket::ignite()

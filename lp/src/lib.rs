@@ -6,6 +6,7 @@ extern crate chrono;
 #[macro_use] extern crate diesel_infer_schema;
 extern crate dotenv;
 #[macro_use] extern crate juniper;
+#[macro_use] extern crate juniper_codegen;
 #[macro_use] extern crate lazy_static;
 
 pub use self::duration::Duration;

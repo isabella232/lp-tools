@@ -6,7 +6,7 @@ use models::ArtistCreditId;
 
 pub type AlbumId = i32;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, GraphQLEnum)]
 pub enum AlbumKind {
     Single,
     EP,

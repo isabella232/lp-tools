@@ -4,13 +4,12 @@ use repositories::ArtistRepository;
 
 pub struct MutationRoot;
 
-graphql_input_object!(
-    struct CreateArtistInput {
-        kind: String,
-        country: Option<String>,
-        disambiguation: Option<String>,
-    }
-);
+#[derive(GraphQLInputObject)]
+struct CreateArtistInput {
+    kind: String,
+    country: Option<String>,
+    disambiguation: Option<String>,
+}
 
 graphql_object!(MutationRoot: Context as "Mutation" |&self| {
     field create_artist(&executor, input: CreateArtistInput) -> Artist {
