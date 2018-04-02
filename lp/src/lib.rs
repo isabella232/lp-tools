@@ -7,8 +7,6 @@ extern crate chrono;
 extern crate dotenv;
 #[macro_use] extern crate juniper;
 #[macro_use] extern crate lazy_static;
-extern crate r2d2;
-extern crate r2d2_diesel;
 
 pub use self::duration::Duration;
 pub use self::partial_date::PartialDate;

@@ -1,7 +1,6 @@
 use diesel::PgConnection;
+use diesel::r2d2::{self, ConnectionManager};
 use dotenv::dotenv;
-use r2d2_diesel::ConnectionManager;
-use r2d2;
 use std::env;
 
 pub type PooledPgConnection = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
