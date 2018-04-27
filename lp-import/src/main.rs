@@ -171,10 +171,15 @@ fn main() {
 
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());
-                    let mut src = format!("{}/-attachments/albums/{}/{}-{}.jpg", pathname, id, disambiguation, first_format);
+
+                    let prefix = format!("{}/-attachments/albums/", pathname);
+
+                    let mut pathname = format!("{}/{}-{}.jpg", id, disambiguation, first_format);
+                    let mut src = format!("{}{}", prefix, pathname);
 
                     if !Path::new(&src).exists() {
-                        src = format!("{}/-attachments/albums/{}/{}.jpg", pathname, id, disambiguation);
+                        pathname = format!("{}/{}.jpg", id, disambiguation);
+                        src = format!("{}{}", prefix, pathname);
 
                         if !Path::new(&src).exists() {
                             panic!("missing artwork: {}", src);
@@ -184,8 +189,16 @@ fn main() {
                     let dst = format!("{}/{}.jpg", dst_prefix, original_id);
                     fs::copy(&src, &dst).expect("artwork copy failed");
 
+                    let thumbnail_src = format!("tmp/cache/{}", pathname);
                     let dst = format!("{}/{}.jpg", dst_prefix, thumbnail_id);
-                    resize(&src, &dst, 256, 256);
+
+                    if !Path::new(&thumbnail_src).exists() {
+                        let cache_dir = format!("tmp/cache/{}", id);
+                        fs::create_dir_all(cache_dir).unwrap();
+                        resize(&src, &thumbnail_src, 256, 256);
+                    }
+
+                    fs::copy(&thumbnail_src, &dst).expect("thumbnail copy failed");
 
                     update_release_artwork_data(release_id, &original_id, &thumbnail_id);
 
