@@ -14,7 +14,8 @@ use futures_cpupool::CpuPool;
 use glob::glob;
 use lp::models::ReleaseId;
 use lp_magick::resize;
-use rand::{thread_rng, Rng};
+use rand::distributions::Uniform;
+use rand::prelude::*;
 use std::env;
 use std::fs::{self, File};
 use std::io::prelude::*;
@@ -23,25 +24,26 @@ use toml::Value;
 
 use lp_import::{Context, parameterize, readers};
 
-static ARTIST_KINDS: [&'static str; 2] = ["people", "groups"];
+const ID_LEN: usize = 32;
 
-struct HexGenerator<'a, R: 'a> {
-    rng: &'a mut R,
+static ARTIST_KINDS: [&'static str; 2] = ["people", "groups"];
+static HEX_CHARSET: &'static [u8] = b"0123456789abcdef";
+
+pub struct HexGenerator {
+    range: Uniform<usize>,
 }
 
-impl<'a, R: Rng> Iterator for HexGenerator<'a, R> {
-    type Item = char;
-
-    fn next(&mut self) -> Option<char> {
-        const HEX_CHARSET: &'static [u8] = b"0123456789abcdef";
-        Some(*self.rng.choose(HEX_CHARSET).unwrap() as char)
+impl HexGenerator {
+    fn new() -> HexGenerator {
+        HexGenerator { range: Uniform::new(0, HEX_CHARSET.len()) }
     }
 }
 
-fn generate_id() -> String {
-    let mut rng = thread_rng();
-    let generator = HexGenerator { rng: &mut rng };
-    generator.take(32).collect()
+impl Distribution<char> for HexGenerator {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> char {
+        let i = self.range.sample(rng);
+        HEX_CHARSET[i] as char
+    }
 }
 
 fn read_toml<F>(pattern: &str, mut callback: F)
@@ -103,6 +105,9 @@ fn main() {
 
     let pool = CpuPool::new_num_cpus();
     let mut tasks = Vec::new();
+
+    let mut rng = SmallRng::from_entropy();
+    let hex_generator = HexGenerator::new();
 
     let mut ctx = Context::new();
     let suffix = ".toml";
@@ -166,8 +171,8 @@ fn main() {
                 let pathname = pathname.to_string();
                 let disambiguation = disambiguation.to_string();
 
-                let original_id = generate_id();
-                let thumbnail_id = generate_id();
+                let original_id: String = hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
+                let thumbnail_id: String = hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
 
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());
