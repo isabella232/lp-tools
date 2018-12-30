@@ -1,4 +1,4 @@
-use ::{Root, Release};
+use crate::{Root, Release};
 use reqwest::Client;
 
 static ENDPOINT: &'static str = "http://localhost:8000/graphql";

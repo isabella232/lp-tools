@@ -1,4 +1,4 @@
-use ::ffi;
+use crate::ffi;
 use std::ffi::CString;
 use std::path::Path;
 

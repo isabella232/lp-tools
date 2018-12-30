@@ -6,7 +6,7 @@ extern crate serde;
 
 use std::io::Read;
 
-pub use taglib::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
+pub use crate::taglib::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 
 pub mod api;
 pub mod ffi;

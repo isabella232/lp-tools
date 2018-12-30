@@ -2,6 +2,7 @@
 name = "lp-tag"
 version = "0.1.0"
 authors = ["Michael Macias <zaeleus@gmail.com>"]
+edition = "2018"
 build = "build.rs"
 
 [dependencies]
