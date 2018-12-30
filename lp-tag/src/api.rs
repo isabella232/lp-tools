@@ -1,5 +1,7 @@
-use crate::{Root, Release};
 use reqwest::Client;
+use serde_json::json;
+
+use crate::{Root, Release};
 
 static ENDPOINT: &'static str = "http://localhost:8000/graphql";
 

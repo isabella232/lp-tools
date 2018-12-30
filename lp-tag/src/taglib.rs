@@ -1,6 +1,7 @@
-use crate::ffi;
 use std::ffi::CString;
 use std::path::Path;
+
+use crate::ffi;
 
 pub struct File {
     ptr: *mut ffi::File,

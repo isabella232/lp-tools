@@ -1,5 +1,3 @@
-extern crate gcc;
-
 fn main() {
     println!("cargo:rustc-link-lib=tag");
 

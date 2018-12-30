@@ -1,16 +1,11 @@
-extern crate glob;
-#[macro_use] extern crate lazy_static;
-extern crate lp_tag;
-extern crate regex;
-extern crate unidecode;
+use std::{env, fs, path::PathBuf};
 
 use glob::glob;
+use lazy_static::lazy_static;
 use lp_tag::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 use lp_tag::api::fetch_release;
 use lp_tag::ffi::{PictureType, StringType};
 use regex::Regex;
-use std::{env, fs};
-use std::path::PathBuf;
 use unidecode::unidecode;
 
 fn sanitize_pathname(s: &str) -> String {

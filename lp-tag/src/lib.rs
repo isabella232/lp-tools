@@ -1,10 +1,6 @@
-extern crate libc;
-extern crate reqwest;
-extern crate serde;
-#[macro_use] extern crate serde_derive;
-#[macro_use] extern crate serde_json;
-
 use std::io::Read;
+
+use serde_derive::Deserialize;
 
 pub use crate::taglib::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 
