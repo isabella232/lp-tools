@@ -28,7 +28,7 @@ fn tracks(ctx: &Context, root: &Value, medium_id: &str, i: usize) -> Result<(), 
             Error::Parse(String::from("expected tracklist.tracks to be an array"))
         })?;
 
-    let medium = ctx.media.get(medium_id.into()).ok_or_else(|| {
+    let medium = ctx.media.get(medium_id).ok_or_else(|| {
         Error::Map(format!("invalid tracklist.medium-ids[{}] ({})", i, medium_id))
     })?;
 

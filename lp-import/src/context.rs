@@ -13,15 +13,21 @@ pub struct Context {
 
 impl Context {
     pub fn new() -> Context {
+        Context::default()
+    }
+
+    pub fn connection(&self) -> &PgConnection {
+        &self.connection
+    }
+}
+
+impl Default for Context {
+    fn default() -> Context {
         Context {
             connection: db::connection().get().unwrap(),
             artists: HashMap::new(),
             media: HashMap::new(),
             songs: HashMap::new(),
         }
-    }
-
-    pub fn connection(&self) -> &PgConnection {
-        &self.connection
     }
 }

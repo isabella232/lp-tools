@@ -37,7 +37,7 @@ fn new(ctx: &Context, root: &Value, medium_id: &str, medium: &Medium) -> Result<
         &song_ref
     };
 
-    let artist_credit_id = if let Some(_) = root.get("artist-credits") {
+    let artist_credit_id = if root.get("artist-credits").is_some() {
         let artist_credit = readers::artist_credit::create(ctx, root)?;
         artist_credit.id
     } else {

@@ -23,7 +23,7 @@ pub fn create(ctx: &Context, root: &Value, artist_id: &str) -> Result<Song, Erro
 }
 
 fn artist_credit(ctx: &Context, root: &Value, artist_id: &str) -> Result<ArtistCredit, Error> {
-    if let Some(_) = root.get("artist-credits") {
+    if root.get("artist-credits").is_some() {
         readers::artist_credit::create(ctx, root)
     } else {
         let mut table = Table::new();
