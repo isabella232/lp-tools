@@ -12,7 +12,7 @@ impl File {
         let path = path.as_ref();
         let c_path = CString::new(path.to_str().unwrap()).unwrap();
         let ptr = unsafe { ffi::taglib_file_new(c_path.as_ptr()) };
-        File { ptr: ptr }
+        File { ptr }
     }
 
     pub fn save(&self) -> bool {
@@ -25,7 +25,7 @@ impl File {
 
     pub fn tag(&self) -> Tag {
         let ptr = unsafe { ffi::taglib_file_id3v2_tag(self.ptr) };
-        Tag { ptr: ptr }
+        Tag { ptr }
     }
 }
 
@@ -76,7 +76,7 @@ pub struct FrameFactory {
 impl FrameFactory {
     pub fn instance() -> FrameFactory {
         let ptr = unsafe { ffi::taglib_id3v2_frame_factory_instance() };
-        FrameFactory { ptr: ptr }
+        FrameFactory { ptr }
     }
 
     pub fn set_default_text_encoding(&self, encoding: ffi::StringType) {
@@ -96,8 +96,7 @@ pub struct AttachedPictureFrame {
 
 impl AttachedPictureFrame {
     pub fn new() -> AttachedPictureFrame {
-        let ptr = unsafe { ffi::taglib_id3v2_attached_picture_frame_new() };
-        AttachedPictureFrame { ptr: ptr }
+        AttachedPictureFrame::default()
     }
 
     pub fn set_mime_type(&self, value: &str) {
@@ -125,6 +124,13 @@ impl AttachedPictureFrame {
     }
 }
 
+impl Default for AttachedPictureFrame {
+    fn default() -> AttachedPictureFrame {
+        let ptr = unsafe { ffi::taglib_id3v2_attached_picture_frame_new() };
+        AttachedPictureFrame { ptr }
+    }
+}
+
 impl Frame for AttachedPictureFrame {
     fn as_frame_ptr(&self) -> *mut ffi::Frame {
         self.ptr as *mut ffi::Frame
@@ -146,7 +152,7 @@ impl TextIdentificationFrame {
             )
         };
 
-        TextIdentificationFrame { ptr: ptr }
+        TextIdentificationFrame { ptr }
     }
 
     pub fn set_text(&self, value: &str) {

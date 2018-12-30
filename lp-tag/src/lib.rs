@@ -106,7 +106,7 @@ impl Release {
 
     pub fn year(&self) -> u32 {
         self.released_on
-            .split("-")
+            .split('-')
             .next()
             .and_then(|y| y.parse().ok())
             .expect("invalid release date")
@@ -157,7 +157,7 @@ mod tests {
             ArtistCreditName { position: 1, name: "Eric Nam".into(), is_default: true, separator: " X ".into() },
         ];
 
-        let artist_credit = ArtistCredit { names: names };
+        let artist_credit = ArtistCredit { names };
 
         assert_eq!(artist_credit.default_name(), "Eric Nam X Somi");
     }
@@ -170,14 +170,14 @@ mod tests {
         ];
 
         let artist_credit = ArtistCredit { names: vec![] };
-        let album = Album { artist_credit: artist_credit, names: names };
+        let album = Album { artist_credit, names };
 
         assert_eq!(album.default_name(), "From. WJSN")
     }
 
     fn build_release() -> Release {
         let artist_credit = ArtistCredit { names: vec![] };
-        let album = Album { artist_credit: artist_credit, names: vec![] };
+        let album = Album { artist_credit, names: vec![] };
         let artwork_urls = ArtworkUrls {
             original: "http://localhost/artwork.jpg".into(),
         };
@@ -185,8 +185,8 @@ mod tests {
         Release {
             country: "KR".into(),
             released_on: "2017-03-13".into(),
-            artwork_urls: artwork_urls,
-            album: album,
+            artwork_urls,
+            album,
             media: vec![],
         }
     }
