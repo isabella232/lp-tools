@@ -1,16 +1,9 @@
-extern crate chrono;
-extern crate diesel;
-#[macro_use] extern crate lazy_static;
-extern crate lp;
-extern crate regex;
-extern crate toml;
-extern crate unidecode;
-
 pub use crate::context::Context;
 
 pub mod context;
 pub mod readers;
 
+use lazy_static::lazy_static;
 use regex::Regex;
 use unidecode::unidecode;
 

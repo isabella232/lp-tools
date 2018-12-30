@@ -1,7 +1,8 @@
-use diesel::pg::PgConnection;
+use std::collections::HashMap;
+
+use diesel::PgConnection;
 use lp::db::{self, PooledPgConnection};
 use lp::models::{Artist, Medium, Song};
-use std::collections::HashMap;
 
 pub struct Context {
     connection: PooledPgConnection,

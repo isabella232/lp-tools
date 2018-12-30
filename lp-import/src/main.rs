@@ -1,28 +1,20 @@
-extern crate diesel;
-extern crate glob;
-extern crate lp;
-extern crate lp_import;
-extern crate lp_magick;
-extern crate toml;
-extern crate futures;
-extern crate futures_cpupool;
-extern crate rand;
+use std::{
+    env,
+    fs::{self, File},
+    io::Read,
+    path::Path,
+};
 
 use diesel::prelude::*;
 use futures::Future;
 use futures_cpupool::CpuPool;
 use glob::glob;
 use lp::models::ReleaseId;
+use lp_import::{Context, parameterize, readers};
 use lp_magick::resize;
 use rand::distributions::Uniform;
 use rand::prelude::*;
-use std::env;
-use std::fs::{self, File};
-use std::io::prelude::*;
-use std::path::Path;
 use toml::Value;
-
-use lp_import::{Context, parameterize, readers};
 
 const ID_LEN: usize = 32;
 
