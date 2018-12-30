@@ -38,7 +38,7 @@ fn main() {
     let release_id = args.get(1).and_then(|id| id.parse::<i32>().ok()).expect("missing release id");
     let working_dir = args.get(2).expect("missing working dir");
 
-    let release = fetch_release(release_id);
+    let release = fetch_release(release_id).unwrap();
 
     let disc_number = 1;
     let medium = release.media.iter()

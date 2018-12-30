@@ -1,4 +1,4 @@
-use reqwest::Client;
+use reqwest::{self, Client};
 use serde_json::json;
 
 use crate::{Root, Release};
@@ -55,7 +55,7 @@ static QUERY: &'static str = r#"
     }
 "#;
 
-pub fn fetch_release(id: i32) -> Release {
+pub fn fetch_release(id: i32) -> reqwest::Result<Release> {
     let client = Client::new();
 
     let payload = json!({
@@ -65,11 +65,9 @@ pub fn fetch_release(id: i32) -> Release {
         }
     });
 
-    let mut response = client.post(ENDPOINT)
+    client.post(ENDPOINT)
         .json(&payload)
         .send()
-        .unwrap();
-
-    let root: Root = response.json().unwrap();
-    root.data.release
+        .and_then(|mut res| res.json::<Root>())
+        .map(|root| root.data.release)
 }
