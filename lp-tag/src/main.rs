@@ -34,9 +34,9 @@ fn test_sanitize_pathname() {
 }
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let release_id = args.get(1).and_then(|id| id.parse::<i32>().ok()).expect("missing release id");
-    let working_dir = args.get(2).expect("missing working dir");
+    let mut args = env::args().skip(1);
+    let release_id = args.next().and_then(|id| id.parse::<i32>().ok()).expect("missing release id");
+    let working_dir = args.next().expect("missing working dir");
 
     let release = fetch_release(release_id).unwrap();
 
@@ -46,7 +46,7 @@ fn main() {
         .expect("media not found");
     let tracks = &medium.tracks;
 
-    let pattern = format!("{}/*.mp3", glob::Pattern::escape(working_dir));
+    let pattern = format!("{}/*.mp3", glob::Pattern::escape(&working_dir));
 
     let entries = glob(&pattern)
         .expect("bad glob pattern")
@@ -101,12 +101,12 @@ fn main() {
         fs::rename(&pathname, &dst).unwrap();
     }
 
-    let mut dst = PathBuf::from(working_dir);
+    let mut dst = PathBuf::from(&working_dir);
     dst.pop();
     let release_date = release.released_on.replace("-", ".");
     let name = sanitize_pathname(&album);
     dst.push(&format!("[{}] {}", release_date, name));
 
-    fs::rename(working_dir, &dst).unwrap();
+    fs::rename(&working_dir, &dst).unwrap();
 
 }
