@@ -1,9 +1,9 @@
 pub use self::album::{Album, AlbumId, AlbumKind, NewAlbum};
 pub use self::album_name::{AlbumName, AlbumNameId, NewAlbumName};
 pub use self::artist::{Artist, ArtistId, ArtistKind, NewArtist};
-pub use self::artist_name::{ArtistName, ArtistNameId, NewArtistName};
 pub use self::artist_credit::{ArtistCredit, ArtistCreditId, NewArtistCredit};
 pub use self::artist_credit_name::{ArtistCreditName, ArtistCreditNameId, NewArtistCreditName};
+pub use self::artist_name::{ArtistName, ArtistNameId, NewArtistName};
 pub use self::artist_url::{ArtistUrl, ArtistUrlId, NewArtistUrl};
 pub use self::contribution::{Contribution, ContributionId, ContributionKind, NewContribution};
 pub use self::medium::{Medium, MediumId, MediumKind, NewMedium};

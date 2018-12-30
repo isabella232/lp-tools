@@ -1,5 +1,6 @@
-use chrono::NaiveDateTime;
 use std::str::FromStr;
+
+use chrono::NaiveDateTime;
 
 use crate::schema::contributions;
 use crate::models::{ArtistCreditId, SongId};
