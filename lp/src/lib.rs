@@ -4,8 +4,6 @@
 #![recursion_limit="128"]
 
 #[macro_use] extern crate diesel;
-#[macro_use] extern crate juniper;
-#[macro_use] extern crate juniper_codegen;
 
 pub use self::duration::Duration;
 pub use self::partial_date::PartialDate;

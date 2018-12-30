@@ -1,3 +1,5 @@
+use juniper::{graphql_object, GraphQLInputObject};
+
 use crate::graphql::Context;
 use crate::models::{Artist, ArtistKind};
 use crate::repositories::ArtistRepository;

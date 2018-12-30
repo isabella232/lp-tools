@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use chrono::NaiveDateTime;
+use juniper::GraphQLEnum;
 
 use crate::schema::artists;
 

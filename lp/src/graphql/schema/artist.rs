@@ -1,4 +1,4 @@
-use juniper::ID;
+use juniper::{graphql_object, ID};
 
 use crate::graphql::Context;
 use crate::models::{Album, ArtistKind, Artist, ArtistName, ArtistUrl};
