@@ -10,7 +10,7 @@ pub struct ContributionRepository<'a> {
 
 impl<'a> ContributionRepository<'a> {
     pub fn new(connection: &PgConnection) -> ContributionRepository {
-        ContributionRepository { connection: connection }
+        ContributionRepository { connection }
     }
 
     pub fn create(&self,
@@ -22,9 +22,9 @@ impl<'a> ContributionRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_contribution = NewContribution {
-            artist_credit_id: artist_credit_id,
-            song_id: song_id,
-            kind: kind,
+            artist_credit_id,
+            song_id,
+            kind,
             created_at: now,
             updated_at: now,
         };

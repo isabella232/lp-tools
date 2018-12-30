@@ -10,7 +10,7 @@ pub struct AlbumNameRepository<'a> {
 
 impl<'a> AlbumNameRepository<'a> {
     pub fn new(connection: &PgConnection) -> AlbumNameRepository {
-        AlbumNameRepository { connection: connection }
+        AlbumNameRepository { connection }
     }
 
     pub fn find_by_album_id(&self, id: AlbumId) -> Vec<AlbumName> {
@@ -34,11 +34,11 @@ impl<'a> AlbumNameRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_album_name = NewAlbumName {
-            album_id: album_id,
-            name: name,
-            locale: locale,
-            is_default: is_default,
-            is_original: is_original,
+            album_id,
+            name,
+            locale,
+            is_default,
+            is_original,
             created_at: now,
             updated_at: now,
         };

@@ -10,7 +10,7 @@ pub struct MediumRepository<'a> {
 
 impl<'a> MediumRepository<'a> {
     pub fn new(connection: &PgConnection) -> MediumRepository {
-        MediumRepository { connection: connection }
+        MediumRepository { connection }
     }
 
     pub fn create(&self,
@@ -23,10 +23,10 @@ impl<'a> MediumRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_medium = NewMedium {
-            release_id: release_id,
-            kind: kind,
-            position: position,
-            name: name,
+            release_id,
+            kind,
+            position,
+            name,
             created_at: now,
             updated_at: now,
         };

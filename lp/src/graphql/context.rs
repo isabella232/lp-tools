@@ -9,11 +9,17 @@ pub struct Context {
 
 impl Context {
     pub fn new() -> Context {
-        Context { connection: db::connection().get().unwrap() }
+        Context::default()
     }
 
     pub fn connection(&self) -> &PgConnection {
         &self.connection
+    }
+}
+
+impl Default for Context {
+    fn default() -> Context {
+        Context { connection: db::connection().get().unwrap() }
     }
 }
 

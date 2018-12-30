@@ -10,7 +10,7 @@ pub struct ArtistUrlRepository<'a> {
 
 impl<'a> ArtistUrlRepository<'a> {
     pub fn new(connection: &PgConnection) -> ArtistUrlRepository {
-        ArtistUrlRepository { connection: connection }
+        ArtistUrlRepository { connection }
     }
 
     pub fn find_by_artist_id(&self, id: ArtistId) -> Vec<ArtistUrl> {
@@ -28,8 +28,8 @@ impl<'a> ArtistUrlRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_artist_url = NewArtistUrl {
-            artist_id: artist_id,
-            url: url,
+            artist_id,
+            url,
             name: "[untitled]",
             created_at: now,
             updated_at: now,

@@ -10,7 +10,7 @@ pub struct TrackRepository<'a> {
 
 impl<'a> TrackRepository<'a> {
     pub fn new(connection: &PgConnection) -> TrackRepository {
-        TrackRepository { connection: connection }
+        TrackRepository { connection }
     }
 
     pub fn create(&self,
@@ -24,11 +24,11 @@ impl<'a> TrackRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_track = NewTrack {
-            medium_id: medium_id,
-            artist_credit_id: artist_credit_id,
-            song_id: song_id,
-            position: position,
-            duration: duration,
+            medium_id,
+            artist_credit_id,
+            song_id,
+            position,
+            duration,
             created_at: now,
             updated_at: now,
         };

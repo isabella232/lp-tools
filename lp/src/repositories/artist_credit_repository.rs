@@ -10,7 +10,7 @@ pub struct ArtistCreditRepository<'a> {
 
 impl<'a> ArtistCreditRepository<'a> {
     pub fn new(connection: &PgConnection) -> ArtistCreditRepository {
-        ArtistCreditRepository { connection: connection }
+        ArtistCreditRepository { connection }
     }
 
     pub fn find(&self, id: ArtistCreditId) -> Option<ArtistCredit> {

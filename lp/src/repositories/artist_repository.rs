@@ -12,7 +12,7 @@ pub struct ArtistRepository<'a> {
 
 impl<'a> ArtistRepository<'a> {
     pub fn new(connection: &PgConnection) -> ArtistRepository {
-        ArtistRepository { connection: connection }
+        ArtistRepository { connection }
     }
 
     pub fn find(&self, id: ArtistId) -> Option<Artist> {
@@ -45,15 +45,15 @@ impl<'a> ArtistRepository<'a> {
     ) -> Artist {
         use crate::schema::artists;
 
-        let started_on = started_on.unwrap_or(PartialDate::default());
-        let ended_on = ended_on.unwrap_or(PartialDate::default());
+        let started_on = started_on.unwrap_or_default();
+        let ended_on = ended_on.unwrap_or_default();
 
         let now = Utc::now().naive_utc();
 
         let new_artist = NewArtist {
-            kind: kind,
-            country: country,
-            disambiguation: disambiguation,
+            kind,
+            country,
+            disambiguation,
             started_on_year: started_on.year,
             started_on_month: started_on.month,
             started_on_day: started_on.day,

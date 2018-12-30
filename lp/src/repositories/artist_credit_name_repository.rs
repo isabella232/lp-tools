@@ -10,9 +10,10 @@ pub struct ArtistCreditNameRepository<'a> {
 
 impl<'a> ArtistCreditNameRepository<'a> {
     pub fn new(connection: &PgConnection) -> ArtistCreditNameRepository {
-        ArtistCreditNameRepository { connection: connection }
+        ArtistCreditNameRepository { connection }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn create(&self,
                   artist_id: ArtistId,
                   artist_credit_id: ArtistCreditId,
@@ -27,14 +28,14 @@ impl<'a> ArtistCreditNameRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_artist_credit_name = NewArtistCreditName {
-            artist_id: artist_id,
-            artist_credit_id: artist_credit_id,
-            position: position,
-            name: name,
-            locale: locale,
-            is_default: is_default,
-            is_original: is_original,
-            separator: separator,
+            artist_id,
+            artist_credit_id,
+            position,
+            name,
+            locale,
+            is_default,
+            is_original,
+            separator,
             created_at: now,
             updated_at: now,
         };

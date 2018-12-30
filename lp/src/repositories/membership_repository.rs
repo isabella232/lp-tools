@@ -11,7 +11,7 @@ pub struct MembershipRepository<'a> {
 
 impl<'a> MembershipRepository<'a> {
     pub fn new(connection: &PgConnection) -> MembershipRepository {
-        MembershipRepository { connection: connection }
+        MembershipRepository { connection }
     }
 
     pub fn create(
@@ -23,14 +23,14 @@ impl<'a> MembershipRepository<'a> {
     ) -> Membership {
         use crate::schema::memberships;
 
-        let started_on = started_on.unwrap_or(PartialDate::default());
-        let ended_on = ended_on.unwrap_or(PartialDate::default());
+        let started_on = started_on.unwrap_or_default();
+        let ended_on = ended_on.unwrap_or_default();
 
         let now = Utc::now().naive_utc();
 
         let new_membership = NewMembership {
             group_id: artist_id,
-            artist_credit_id: artist_credit_id,
+            artist_credit_id,
             started_on_year: started_on.year,
             started_on_month: started_on.month,
             started_on_day: started_on.day,

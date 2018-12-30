@@ -10,7 +10,7 @@ pub struct TrackNameRepository<'a> {
 
 impl<'a> TrackNameRepository<'a> {
     pub fn new(connection: &PgConnection) -> TrackNameRepository {
-        TrackNameRepository { connection: connection }
+        TrackNameRepository { connection }
     }
 
     pub fn find_by_track_id(&self, id: TrackId) -> Vec<TrackName> {
@@ -33,11 +33,11 @@ impl<'a> TrackNameRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_track_name = NewTrackName {
-            track_id: track_id,
-            name: name,
-            locale: locale,
-            is_default: is_default,
-            is_original: is_original,
+            track_id,
+            name,
+            locale,
+            is_default,
+            is_original,
             created_at: now,
             updated_at: now,
         };

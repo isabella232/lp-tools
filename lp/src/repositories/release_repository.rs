@@ -10,7 +10,7 @@ pub struct ReleaseRepository<'a> {
 
 impl<'a> ReleaseRepository<'a> {
     pub fn new(connection: &PgConnection) -> ReleaseRepository {
-        ReleaseRepository { connection: connection }
+        ReleaseRepository { connection }
     }
 
     pub fn create(&self,
@@ -24,11 +24,11 @@ impl<'a> ReleaseRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_release = NewRelease {
-            album_id: album_id,
-            released_on: released_on,
-            country: country,
-            catalog_number: catalog_number,
-            disambiguation: disambiguation,
+            album_id,
+            released_on,
+            country,
+            catalog_number,
+            disambiguation,
             artwork_data: None,
             created_at: now,
             updated_at: now,

@@ -9,7 +9,7 @@ pub struct PartialDate {
 
 impl PartialDate {
     pub fn new(year: Option<i16>, month: Option<i16>, day: Option<i16>) -> PartialDate {
-        PartialDate { year: year, month: month, day: day }
+        PartialDate { year, month, day }
     }
 }
 

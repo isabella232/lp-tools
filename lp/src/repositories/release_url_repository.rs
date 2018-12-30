@@ -10,7 +10,7 @@ pub struct ReleaseUrlRepository<'a> {
 
 impl<'a> ReleaseUrlRepository<'a> {
     pub fn new(connection: &PgConnection) -> ReleaseUrlRepository {
-        ReleaseUrlRepository { connection: connection }
+        ReleaseUrlRepository { connection }
     }
 
     pub fn create(&self, release_id: ReleaseId, url: &str) -> ReleaseUrl {
@@ -19,8 +19,8 @@ impl<'a> ReleaseUrlRepository<'a> {
         let now = Utc::now().naive_utc();
 
         let new_release_url = NewReleaseUrl {
-            release_id: release_id,
-            url: url,
+            release_id,
+            url,
             name: "[untitled]",
             created_at: now,
             updated_at: now,
