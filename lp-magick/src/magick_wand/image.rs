@@ -1,8 +1,8 @@
 use std::ffi::CString;
 use std::path::Path;
 
-use ::ffi::{self, FilterType, GravityType};
-use super::MagickWand;
+use crate::ffi::{self, FilterType, GravityType};
+use crate::MagickWand;
 
 impl MagickWand {
     pub fn read_image<P>(&self, path: P) where P: AsRef<Path> {

@@ -1,4 +1,4 @@
-use ::ffi;
+use crate::ffi;
 
 mod image;
 
