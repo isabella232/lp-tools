@@ -2,8 +2,8 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use ::PartialDate;
-use models::{ArtistId, ArtistCreditId, Membership, NewMembership};
+use crate::PartialDate;
+use crate::models::{ArtistId, ArtistCreditId, Membership, NewMembership};
 
 pub struct MembershipRepository<'a> {
     connection: &'a PgConnection,
@@ -21,7 +21,7 @@ impl<'a> MembershipRepository<'a> {
         started_on: Option<PartialDate>,
         ended_on: Option<PartialDate>,
     ) -> Membership {
-        use schema::memberships;
+        use crate::schema::memberships;
 
         let started_on = started_on.unwrap_or(PartialDate::default());
         let ended_on = ended_on.unwrap_or(PartialDate::default());

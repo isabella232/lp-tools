@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{TrackId, TrackName, NewTrackName};
+use crate::models::{TrackId, TrackName, NewTrackName};
 
 pub struct TrackNameRepository<'a> {
     connection: &'a PgConnection,
@@ -14,7 +14,7 @@ impl<'a> TrackNameRepository<'a> {
     }
 
     pub fn find_by_track_id(&self, id: TrackId) -> Vec<TrackName> {
-        use schema::track_names::dsl::{track_names, track_id};
+        use crate::schema::track_names::dsl::{track_names, track_id};
 
         track_names
             .filter(track_id.eq(id))
@@ -28,7 +28,7 @@ impl<'a> TrackNameRepository<'a> {
                   locale: &str,
                   is_default: bool,
                   is_original: bool) -> TrackName {
-        use schema::track_names;
+        use crate::schema::track_names;
 
         let now = Utc::now().naive_utc();
 

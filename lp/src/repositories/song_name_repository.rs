@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{SongId, SongName, NewSongName};
+use crate::models::{SongId, SongName, NewSongName};
 
 pub struct SongNameRepository<'a> {
     connection: &'a PgConnection,
@@ -14,7 +14,7 @@ impl<'a> SongNameRepository<'a> {
     }
 
     pub fn find_by_song_id(&self, id: SongId) -> Vec<SongName> {
-        use schema::song_names::dsl::{song_names, song_id};
+        use crate::schema::song_names::dsl::{song_names, song_id};
 
         song_names
             .filter(song_id.eq(id))
@@ -28,7 +28,7 @@ impl<'a> SongNameRepository<'a> {
                   locale: &str,
                   is_default: bool,
                   is_original: bool) -> SongName {
-        use schema::song_names;
+        use crate::schema::song_names;
 
         let now = Utc::now().naive_utc();
 

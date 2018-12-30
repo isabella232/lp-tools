@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 use std::str::FromStr;
 
-use schema::artists;
+use crate::schema::artists;
 
 pub type ArtistId = i32;
 

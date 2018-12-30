@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{Album, ArtistCreditId, ArtistId, NewAlbum};
+use crate::models::{Album, ArtistCreditId, ArtistId, NewAlbum};
 
 pub struct AlbumRepository<'a> {
     connection: &'a PgConnection,
@@ -14,7 +14,7 @@ impl<'a> AlbumRepository<'a> {
     }
 
     pub fn find_by_artist_id(&self, artist_id: ArtistId) -> Vec<Album> {
-        use schema::{albums, artist_credit_names};
+        use crate::schema::{albums, artist_credit_names};
         use diesel::pg::expression::dsl::any;
 
         let name_ids = artist_credit_names::table
@@ -28,7 +28,7 @@ impl<'a> AlbumRepository<'a> {
     }
 
     pub fn create(&self, artist_credit_id: ArtistCreditId, kind: i32) -> Album {
-        use schema::albums;
+        use crate::schema::albums;
 
         let now = Utc::now().naive_utc();
 

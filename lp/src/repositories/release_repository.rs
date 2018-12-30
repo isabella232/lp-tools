@@ -2,7 +2,7 @@ use chrono::{NaiveDate, Utc};
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{AlbumId, Release, NewRelease};
+use crate::models::{AlbumId, Release, NewRelease};
 
 pub struct ReleaseRepository<'a> {
     connection: &'a PgConnection,
@@ -19,7 +19,7 @@ impl<'a> ReleaseRepository<'a> {
                   country: Option<&str>,
                   catalog_number: Option<&str>,
                   disambiguation: Option<&str>) -> Release {
-        use schema::releases;
+        use crate::schema::releases;
 
         let now = Utc::now().naive_utc();
 

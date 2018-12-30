@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 
-use models::TrackId;
-use schema::track_names;
+use crate::models::TrackId;
+use crate::schema::track_names;
 
 pub type TrackNameId = i32;
 

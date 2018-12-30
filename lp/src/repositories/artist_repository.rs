@@ -2,9 +2,9 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use ::PartialDate;
-use models::{Artist, ArtistId, NewArtist};
-use models::ArtistName;
+use crate::PartialDate;
+use crate::models::{Artist, ArtistId, NewArtist};
+use crate::models::ArtistName;
 
 pub struct ArtistRepository<'a> {
     connection: &'a PgConnection,
@@ -16,12 +16,12 @@ impl<'a> ArtistRepository<'a> {
     }
 
     pub fn find(&self, id: ArtistId) -> Option<Artist> {
-        use schema::artists::dsl::artists;
+        use crate::schema::artists::dsl::artists;
         artists.find(id).first(self.connection).ok()
     }
 
     pub fn search(&self, query: &str) -> Vec<Artist> {
-        use schema::{artists, artist_names};
+        use crate::schema::{artists, artist_names};
 
         let pattern = format!("%{}%", query);
 
@@ -43,7 +43,7 @@ impl<'a> ArtistRepository<'a> {
         ended_on: Option<PartialDate>,
         disambiguation: Option<&str>,
     ) -> Artist {
-        use schema::artists;
+        use crate::schema::artists;
 
         let started_on = started_on.unwrap_or(PartialDate::default());
         let ended_on = ended_on.unwrap_or(PartialDate::default());

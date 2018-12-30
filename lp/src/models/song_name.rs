@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 
-use models::SongId;
-use schema::song_names;
+use crate::models::SongId;
+use crate::schema::song_names;
 
 pub type SongNameId = i32;
 

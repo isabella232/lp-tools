@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 
-use schema::artist_credit_names;
-use models::{ArtistCreditId, ArtistId};
+use crate::schema::artist_credit_names;
+use crate::models::{ArtistCreditId, ArtistId};
 
 pub type ArtistCreditNameId = i32;
 

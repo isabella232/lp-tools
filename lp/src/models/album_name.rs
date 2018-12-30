@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 
-use models::AlbumId;
-use schema::album_names;
+use crate::models::AlbumId;
+use crate::schema::album_names;
 
 pub type AlbumNameId = i32;
 

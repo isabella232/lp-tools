@@ -1,6 +1,6 @@
-use graphql::Context;
-use models::{Artist, ArtistKind};
-use repositories::ArtistRepository;
+use crate::graphql::Context;
+use crate::models::{Artist, ArtistKind};
+use crate::repositories::ArtistRepository;
 
 pub struct MutationRoot;
 

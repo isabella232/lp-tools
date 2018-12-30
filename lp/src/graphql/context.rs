@@ -1,7 +1,7 @@
 use diesel::pg::PgConnection;
 use juniper;
 
-use db::{self, PooledPgConnection};
+use crate::db::{self, PooledPgConnection};
 
 pub struct Context {
     connection: PooledPgConnection,

@@ -1,8 +1,8 @@
 use juniper::ID;
 
-use graphql::Context;
-use models::Artist;
-use repositories::ArtistRepository;
+use crate::graphql::Context;
+use crate::models::Artist;
+use crate::repositories::ArtistRepository;
 
 pub struct QueryRoot;
 

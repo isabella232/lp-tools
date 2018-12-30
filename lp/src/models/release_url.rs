@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 
-use models::ReleaseId;
-use schema::release_urls;
+use crate::models::ReleaseId;
+use crate::schema::release_urls;
 
 pub type ReleaseUrlId = i32;
 

@@ -1,6 +1,6 @@
 use chrono::NaiveDateTime;
 
-use schema::artist_credits;
+use crate::schema::artist_credits;
 
 pub type ArtistCreditId = i32;
 

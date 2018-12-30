@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{ReleaseId, ReleaseUrl, NewReleaseUrl};
+use crate::models::{ReleaseId, ReleaseUrl, NewReleaseUrl};
 
 pub struct ReleaseUrlRepository<'a> {
     connection: &'a PgConnection,
@@ -14,7 +14,7 @@ impl<'a> ReleaseUrlRepository<'a> {
     }
 
     pub fn create(&self, release_id: ReleaseId, url: &str) -> ReleaseUrl {
-        use schema::release_urls;
+        use crate::schema::release_urls;
 
         let now = Utc::now().naive_utc();
 

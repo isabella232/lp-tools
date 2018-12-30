@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{Medium, NewMedium, ReleaseId};
+use crate::models::{Medium, NewMedium, ReleaseId};
 
 pub struct MediumRepository<'a> {
     connection: &'a PgConnection,
@@ -18,7 +18,7 @@ impl<'a> MediumRepository<'a> {
                   kind: i32,
                   position: i16,
                   name: Option<&str>) -> Medium {
-        use schema::media;
+        use crate::schema::media;
 
         let now = Utc::now().naive_utc();
 

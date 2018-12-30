@@ -1,8 +1,8 @@
 use chrono::NaiveDateTime;
 use std::str::FromStr;
 
-use schema::contributions;
-use models::{ArtistCreditId, SongId};
+use crate::schema::contributions;
+use crate::models::{ArtistCreditId, SongId};
 
 pub type ContributionId = i32;
 

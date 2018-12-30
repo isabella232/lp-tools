@@ -1,7 +1,7 @@
 use chrono::{NaiveDate, NaiveDateTime};
 
-use schema::releases;
-use models::AlbumId;
+use crate::schema::releases;
+use crate::models::AlbumId;
 
 pub type ReleaseId = i32;
 

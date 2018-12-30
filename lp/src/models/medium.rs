@@ -1,8 +1,8 @@
 use chrono::NaiveDateTime;
 use std::str::FromStr;
 
-use schema::media;
-use models::ReleaseId;
+use crate::schema::media;
+use crate::models::ReleaseId;
 
 pub type MediumId = i32;
 

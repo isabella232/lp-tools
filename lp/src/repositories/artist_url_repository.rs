@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{ArtistId, ArtistUrl, NewArtistUrl};
+use crate::models::{ArtistId, ArtistUrl, NewArtistUrl};
 
 pub struct ArtistUrlRepository<'a> {
     connection: &'a PgConnection,
@@ -14,7 +14,7 @@ impl<'a> ArtistUrlRepository<'a> {
     }
 
     pub fn find_by_artist_id(&self, id: ArtistId) -> Vec<ArtistUrl> {
-        use schema::artist_urls::dsl::{artist_urls, artist_id};
+        use crate::schema::artist_urls::dsl::{artist_urls, artist_id};
 
         artist_urls
             .filter(artist_id.eq(id))
@@ -23,7 +23,7 @@ impl<'a> ArtistUrlRepository<'a> {
     }
 
     pub fn create(&self, artist_id: ArtistId, url: &str) -> ArtistUrl {
-        use schema::artist_urls;
+        use crate::schema::artist_urls;
 
         let now = Utc::now().naive_utc();
 

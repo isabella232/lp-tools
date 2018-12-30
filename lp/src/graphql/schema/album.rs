@@ -1,8 +1,8 @@
 use juniper::ID;
 
-use graphql::Context;
-use models::{Album, AlbumKind, AlbumName, ArtistCredit};
-use repositories::{ArtistCreditRepository, AlbumNameRepository};
+use crate::graphql::Context;
+use crate::models::{Album, AlbumKind, AlbumName, ArtistCredit};
+use crate::repositories::{ArtistCreditRepository, AlbumNameRepository};
 
 graphql_object!(Album: Context |&self| {
     field id() -> ID {

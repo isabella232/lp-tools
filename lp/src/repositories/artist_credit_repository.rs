@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{ArtistCredit, ArtistCreditId, NewArtistCredit};
+use crate::models::{ArtistCredit, ArtistCreditId, NewArtistCredit};
 
 pub struct ArtistCreditRepository<'a> {
     connection: &'a PgConnection,
@@ -14,12 +14,12 @@ impl<'a> ArtistCreditRepository<'a> {
     }
 
     pub fn find(&self, id: ArtistCreditId) -> Option<ArtistCredit> {
-        use schema::artist_credits::dsl::artist_credits;
+        use crate::schema::artist_credits::dsl::artist_credits;
         artist_credits.find(id).first(self.connection).ok()
     }
 
     pub fn create(&self) -> ArtistCredit {
-        use schema::artist_credits;
+        use crate::schema::artist_credits;
 
         let now = Utc::now().naive_utc();
 

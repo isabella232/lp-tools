@@ -1,7 +1,7 @@
 use juniper::ID;
 
-use graphql::Context;
-use models::AlbumName;
+use crate::graphql::Context;
+use crate::models::AlbumName;
 
 graphql_object!(AlbumName: Context |&self| {
     field id() -> ID {

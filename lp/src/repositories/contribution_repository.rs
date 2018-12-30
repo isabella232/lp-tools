@@ -2,7 +2,7 @@ use chrono::Utc;
 use diesel::{self, PgConnection};
 use diesel::prelude::*;
 
-use models::{Contribution, ArtistCreditId, NewContribution, SongId};
+use crate::models::{Contribution, ArtistCreditId, NewContribution, SongId};
 
 pub struct ContributionRepository<'a> {
     connection: &'a PgConnection,
@@ -17,7 +17,7 @@ impl<'a> ContributionRepository<'a> {
                   artist_credit_id: ArtistCreditId,
                   song_id: SongId,
                   kind: i32) -> Contribution {
-        use schema::contributions;
+        use crate::schema::contributions;
 
         let now = Utc::now().naive_utc();
 
