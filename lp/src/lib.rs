@@ -1,3 +1,5 @@
+#![allow(proc_macro_derive_resolution_fallback)]
+
 // increase limit for `infer_schema!`
 #![recursion_limit="128"]
 
