@@ -6,7 +6,7 @@ extern crate regex;
 extern crate toml;
 extern crate unidecode;
 
-pub use context::Context;
+pub use crate::context::Context;
 
 pub mod context;
 pub mod readers;

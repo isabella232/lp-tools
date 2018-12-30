@@ -2,8 +2,8 @@ use lp::models::{Artist, ArtistKind};
 use lp::repositories::{ArtistRepository, ArtistNameRepository, ArtistUrlRepository};
 use toml::Value;
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value) -> Result<Artist, Error> {
     let artist = new(ctx, root)?;

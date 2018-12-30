@@ -2,8 +2,8 @@ use lp::models::{Medium, MediumKind, Release};
 use lp::repositories::MediumRepository;
 use toml::Value;
 
-use ::Context;
-use ::readers::Error;
+use crate::Context;
+use crate::readers::Error;
 
 pub fn create(ctx: &Context, root: &Value, release: &Release, i: i16) -> Result<Medium, Error> {
     let kind = root.get("kind")

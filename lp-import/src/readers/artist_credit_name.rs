@@ -2,8 +2,8 @@ use lp::models::{Artist, ArtistCredit, ArtistName};
 use lp::repositories::{ArtistCreditNameRepository, ArtistNameRepository};
 use toml::Value;
 
-use ::Context;
-use ::readers::Error;
+use crate::Context;
+use crate::readers::Error;
 
 pub fn create(
     ctx: &Context,

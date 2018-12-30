@@ -3,8 +3,8 @@ use lp::models::{Medium, Track};
 use lp::repositories::{SongNameRepository, TrackRepository, TrackNameRepository};
 use toml::Value;
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value, medium_id: &str, medium: &Medium) -> Result<Track, Error> {
     let track = new(ctx, root, medium_id, medium)?;

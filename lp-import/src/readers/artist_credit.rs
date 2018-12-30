@@ -2,8 +2,8 @@ use lp::models::ArtistCredit;
 use lp::repositories::ArtistCreditRepository;
 use toml::value::{Table, Value};
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value) -> Result<ArtistCredit, Error> {
     if let Some(array) = root.get("artist-credits").and_then(Value::as_array) {

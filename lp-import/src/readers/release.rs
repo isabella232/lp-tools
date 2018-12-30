@@ -3,8 +3,8 @@ use lp::models::{Album, Medium, Release};
 use lp::repositories::{ReleaseRepository, ReleaseUrlRepository};
 use toml::Value;
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value, album: &Album) -> Result<(Release, Vec<Medium>), Error> {
     let release = new(ctx, root, album)?;

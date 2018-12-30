@@ -1,7 +1,7 @@
 use toml::Value;
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value) -> Result<(), Error> {
     let values = root.get("medium-ids")

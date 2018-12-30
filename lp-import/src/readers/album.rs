@@ -2,8 +2,8 @@ use lp::models::{Album, AlbumKind, Medium, Release};
 use lp::repositories::{AlbumRepository, AlbumNameRepository};
 use toml::Value;
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub type Releases = Vec<(Release, Vec<Medium>)>;
 

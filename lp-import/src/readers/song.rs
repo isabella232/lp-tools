@@ -2,8 +2,8 @@ use lp::models::{ArtistCredit, Song};
 use lp::repositories::{SongRepository, SongNameRepository, SongUrlRepository};
 use toml::value::{Table, Value};
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value, artist_id: &str) -> Result<Song, Error> {
     let artist_credit = artist_credit(ctx, root, artist_id)?;

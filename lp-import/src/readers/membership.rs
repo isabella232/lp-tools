@@ -2,8 +2,8 @@ use lp::models::{Artist, Membership};
 use lp::repositories::MembershipRepository;
 use toml::Value;
 
-use ::Context;
-use ::readers::{self, Error};
+use crate::Context;
+use crate::readers::{self, Error};
 
 pub fn create(ctx: &Context, root: &Value, artist: &Artist) -> Result<Membership, Error> {
     new(ctx, root, artist)
