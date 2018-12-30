@@ -1,5 +1,3 @@
-extern crate libc;
-
 pub use self::magick_wand::MagickWand;
 
 pub mod ffi;

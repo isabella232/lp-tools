@@ -8,8 +8,6 @@ There is a single `resize` function that will resize the image, filling the
 area to the given dimensions and cropping the excess.
 
 ```rust
-extern crate lp_magick;
-
 use lp_magick::resize;
 
 resize("in.jpg", "out.jpg", 120, 120);
