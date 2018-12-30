@@ -8,12 +8,18 @@ pub struct MagickWand {
 
 impl MagickWand {
     pub fn new() -> MagickWand {
-        let ptr = unsafe { ffi::NewMagickWand() };
-        MagickWand::from(ptr)
+        MagickWand::default()
     }
 
     pub fn as_ptr(&self) -> *mut ffi::MagickWand {
         self.ptr
+    }
+}
+
+impl Default for MagickWand {
+    fn default() -> MagickWand {
+        let ptr = unsafe { ffi::NewMagickWand() };
+        MagickWand::from(ptr)
     }
 }
 
@@ -25,6 +31,6 @@ impl Drop for MagickWand {
 
 impl From<*mut ffi::MagickWand> for MagickWand {
     fn from(ptr: *mut ffi::MagickWand) -> MagickWand {
-        MagickWand { ptr: ptr }
+        MagickWand { ptr }
     }
 }
