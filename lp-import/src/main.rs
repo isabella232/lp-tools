@@ -50,7 +50,10 @@ fn read_toml<F>(pattern: &str, mut callback: F)
         let mut toml = String::new();
         file.read_to_string(&mut toml).expect("could not read file");
 
-        let data = toml.parse().unwrap();
+        let data = toml.parse().unwrap_or_else(|e| {
+            panic!("{}: {}", entry.display(), e);
+        });
+
         callback(&entry, data);
     }
 }
