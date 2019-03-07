@@ -1,43 +1,25 @@
-#![feature(plugin)]
-#![plugin(rocket_codegen)]
-
-extern crate juniper;
-extern crate juniper_rocket;
-#[macro_use] extern crate lazy_static;
-extern crate lp;
-extern crate rocket;
-
 use juniper::RootNode;
 use lp::graphql::{Context, MutationRoot, QueryRoot};
-use rocket::response::content;
+use warp::Filter;
 
-lazy_static! {
-    static ref QUERY_ROOT: QueryRoot = QueryRoot;
-    static ref MUTATION_ROOT: MutationRoot = MutationRoot;
-    static ref SCHEMA: RootNode<'static, &'static QueryRoot, &'static MutationRoot> = {
-        RootNode::new(&QUERY_ROOT, &MUTATION_ROOT)
-    };
-}
+type Schema = RootNode<'static, QueryRoot, MutationRoot>;
 
-#[get("/graphql?<query>")]
-fn graphql_get(query: juniper_rocket::GraphQLRequest) -> juniper_rocket::GraphQLResponse {
-    let context = Context::new();
-    query.execute(&SCHEMA, &context)
-}
-
-#[post("/graphql", data = "<query>")]
-fn graphql_post(query: juniper_rocket::GraphQLRequest) -> juniper_rocket::GraphQLResponse {
-    let context = Context::new();
-    query.execute(&SCHEMA, &context)
-}
-
-#[get("/")]
-fn graphiql() -> content::Html<String> {
-    juniper_rocket::graphiql_source("/graphql")
+fn schema() -> Schema {
+    Schema::new(QueryRoot, MutationRoot)
 }
 
 fn main() {
-    rocket::ignite()
-        .mount("/", routes![graphql_get, graphql_post, graphiql])
-        .launch();
+    let state = warp::any().map(Context::new);
+
+    let graphql_filter = juniper_warp::make_graphql_filter(schema(), state.boxed());
+    let graphql = warp::path("graphql").and(graphql_filter);
+
+    let graphiql_filter = juniper_warp::graphiql_filter("/graphql");
+    let graphiql = warp::path("graphiql").and(graphiql_filter);
+
+    let log = warp::log("lp-server");
+
+    let routes = warp::get2().and(graphiql).or(graphql).with(log);
+
+    warp::serve(routes).run(([127, 0, 0, 1], 3030));
 }
