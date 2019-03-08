@@ -26,7 +26,7 @@ pub enum StringType {
 }
 
 #[link(name = "taglib")]
-extern {
+extern "C" {
     pub fn taglib_file_new(pathname: *const c_char) -> *mut File;
     pub fn taglib_file_free(file: *mut File);
     pub fn taglib_file_save(file: *mut File) -> bool;
@@ -41,13 +41,32 @@ extern {
     pub fn taglib_tag_set_year(tag: *mut Tag, value: c_uint);
 
     pub fn taglib_id3v2_frame_factory_instance() -> *mut FrameFactory;
-    pub fn taglib_id3v2_frame_factory_set_default_text_encoding(factory: *mut FrameFactory, encoding: StringType);
+    pub fn taglib_id3v2_frame_factory_set_default_text_encoding(
+        factory: *mut FrameFactory,
+        encoding: StringType,
+    );
 
     pub fn taglib_id3v2_attached_picture_frame_new() -> *mut AttachedPictureFrame;
-    pub fn taglib_id3v2_attached_picture_frame_set_mime_type(frame: *mut AttachedPictureFrame, value: *const c_char);
-    pub fn taglib_id3v2_attached_picture_frame_set_picture(frame: *mut AttachedPictureFrame, data: *const c_char, len: c_uint);
-    pub fn taglib_id3v2_attached_picture_frame_set_type(frame: *mut AttachedPictureFrame, value: PictureType);
+    pub fn taglib_id3v2_attached_picture_frame_set_mime_type(
+        frame: *mut AttachedPictureFrame,
+        value: *const c_char,
+    );
+    pub fn taglib_id3v2_attached_picture_frame_set_picture(
+        frame: *mut AttachedPictureFrame,
+        data: *const c_char,
+        len: c_uint,
+    );
+    pub fn taglib_id3v2_attached_picture_frame_set_type(
+        frame: *mut AttachedPictureFrame,
+        value: PictureType,
+    );
 
-    pub fn taglib_id3v2_text_identification_frame_new(id: *const c_char, encoding: StringType) -> *mut TextIdentificationFrame;
-    pub fn taglib_id3v2_text_identification_frame_set_text(frame: *mut TextIdentificationFrame, value: *const c_char);
+    pub fn taglib_id3v2_text_identification_frame_new(
+        id: *const c_char,
+        encoding: StringType,
+    ) -> *mut TextIdentificationFrame;
+    pub fn taglib_id3v2_text_identification_frame_set_text(
+        frame: *mut TextIdentificationFrame,
+        value: *const c_char,
+    );
 }

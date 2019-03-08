@@ -1,8 +1,8 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
-use crate::models::{Contribution, ArtistCreditId, NewContribution, SongId};
+use crate::models::{ArtistCreditId, Contribution, NewContribution, SongId};
 
 pub struct ContributionRepository<'a> {
     connection: &'a PgConnection,
@@ -13,10 +13,12 @@ impl<'a> ContributionRepository<'a> {
         ContributionRepository { connection }
     }
 
-    pub fn create(&self,
-                  artist_credit_id: ArtistCreditId,
-                  song_id: SongId,
-                  kind: i32) -> Contribution {
+    pub fn create(
+        &self,
+        artist_credit_id: ArtistCreditId,
+        song_id: SongId,
+        kind: i32,
+    ) -> Contribution {
         use crate::schema::contributions;
 
         let now = Utc::now().naive_utc();

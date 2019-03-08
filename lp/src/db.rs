@@ -1,7 +1,7 @@
 use std::env;
 
-use diesel::PgConnection;
 use diesel::r2d2::{self, ConnectionManager};
+use diesel::PgConnection;
 use dotenv::dotenv;
 use lazy_static::lazy_static;
 
@@ -14,7 +14,9 @@ lazy_static! {
         let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
         let manager = ConnectionManager::<PgConnection>::new(database_url);
 
-        r2d2::Pool::builder().build(manager).expect("failed to create connection pool")
+        r2d2::Pool::builder()
+            .build(manager)
+            .expect("failed to create connection pool")
     };
 }
 

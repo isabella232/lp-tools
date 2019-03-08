@@ -1,9 +1,9 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
+use crate::models::{ArtistCreditId, ArtistId, Membership, NewMembership};
 use crate::PartialDate;
-use crate::models::{ArtistId, ArtistCreditId, Membership, NewMembership};
 
 pub struct MembershipRepository<'a> {
     connection: &'a PgConnection,

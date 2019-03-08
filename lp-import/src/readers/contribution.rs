@@ -2,8 +2,8 @@ use lp::models::{ArtistCredit, Contribution, ContributionKind, Song};
 use lp::repositories::ContributionRepository;
 use toml::Value;
 
-use crate::Context;
 use crate::readers::{self, Error};
+use crate::Context;
 
 pub fn create(ctx: &Context, root: &Value, song: &Song) -> Result<Contribution, Error> {
     let artist_credit = artist_credit(ctx, root)?;
@@ -20,15 +20,13 @@ fn new(
     artist_credit: &ArtistCredit,
     song: &Song,
 ) -> Result<Contribution, Error> {
-    let kind = root.get("kind")
+    let kind = root
+        .get("kind")
         .and_then(Value::as_str)
-        .ok_or_else(|| {
-            Error::Parse(String::from("expected contribution.kind to be a string"))
-        })
+        .ok_or_else(|| Error::Parse(String::from("expected contribution.kind to be a string")))
         .and_then(|s| {
-            s.parse::<ContributionKind>().map_err(|_| {
-                Error::Parse(format!("invalid contribution.kind ({})", s))
-            })
+            s.parse::<ContributionKind>()
+                .map_err(|_| Error::Parse(format!("invalid contribution.kind ({})", s)))
         })?;
 
     let repo = ContributionRepository::new(ctx.connection());

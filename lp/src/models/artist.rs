@@ -30,7 +30,7 @@ impl FromStr for ArtistKind {
         match s {
             "person" => Ok(ArtistKind::Person),
             "group" => Ok(ArtistKind::Group),
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
@@ -52,7 +52,7 @@ pub struct Artist {
 }
 
 #[derive(Insertable)]
-#[table_name="artists"]
+#[table_name = "artists"]
 pub struct NewArtist<'a> {
     pub kind: i32,
     pub country: &'a str,

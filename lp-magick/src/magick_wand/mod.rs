@@ -25,7 +25,9 @@ impl Default for MagickWand {
 
 impl Drop for MagickWand {
     fn drop(&mut self) {
-        unsafe { ffi::DestroyMagickWand(self.as_ptr()); }
+        unsafe {
+            ffi::DestroyMagickWand(self.as_ptr());
+        }
     }
 }
 

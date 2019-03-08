@@ -2,9 +2,9 @@ use std::{env, fs, path::PathBuf};
 
 use glob::glob;
 use lazy_static::lazy_static;
-use lp_tag::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 use lp_tag::api::fetch_release;
 use lp_tag::ffi::{PictureType, StringType};
+use lp_tag::{AttachedPictureFrame, File, FrameFactory, TextIdentificationFrame};
 use regex::Regex;
 use unidecode::unidecode;
 
@@ -35,13 +35,18 @@ fn test_sanitize_pathname() {
 
 fn main() {
     let mut args = env::args().skip(1);
-    let release_id = args.next().and_then(|id| id.parse::<i32>().ok()).expect("missing release id");
+    let release_id = args
+        .next()
+        .and_then(|id| id.parse::<i32>().ok())
+        .expect("missing release id");
     let working_dir = args.next().expect("missing working dir");
 
     let release = fetch_release(release_id).unwrap();
 
     let disc_number = 1;
-    let medium = release.media.iter()
+    let medium = release
+        .media
+        .iter()
         .find(|m| m.position == disc_number)
         .expect("media not found");
     let tracks = &medium.tracks;
@@ -54,9 +59,11 @@ fn main() {
         .collect::<Vec<_>>();
 
     if entries.len() != tracks.len() {
-        panic!("track count does not match working dir (expected {}, got {})",
+        panic!(
+            "track count does not match working dir (expected {}, got {})",
             tracks.len(),
-            entries.len());
+            entries.len()
+        );
     }
 
     FrameFactory::instance().set_default_text_encoding(StringType::UTF16);
@@ -108,5 +115,4 @@ fn main() {
     dst.push(&format!("[{}] {}", release_date, name));
 
     fs::rename(&working_dir, &dst).unwrap();
-
 }

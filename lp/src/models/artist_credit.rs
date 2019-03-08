@@ -12,7 +12,7 @@ pub struct ArtistCredit {
 }
 
 #[derive(Insertable)]
-#[table_name="artist_credits"]
+#[table_name = "artist_credits"]
 pub struct NewArtistCredit {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,

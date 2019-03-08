@@ -1,7 +1,7 @@
 use juniper::{graphql_object, ID};
 
 use crate::graphql::Context;
-use crate::models::{Album, ArtistKind, Artist, ArtistName, ArtistUrl};
+use crate::models::{Album, Artist, ArtistKind, ArtistName, ArtistUrl};
 use crate::repositories::{AlbumRepository, ArtistNameRepository, ArtistUrlRepository};
 
 graphql_object!(Artist: Context |&self| {

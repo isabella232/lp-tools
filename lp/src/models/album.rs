@@ -3,8 +3,8 @@ use std::str::FromStr;
 use chrono::NaiveDateTime;
 use juniper::GraphQLEnum;
 
-use crate::schema::albums;
 use crate::models::ArtistCreditId;
+use crate::schema::albums;
 
 pub type AlbumId = i32;
 
@@ -18,10 +18,10 @@ pub enum AlbumKind {
 impl AlbumKind {
     pub fn from_i32(n: i32) -> Option<AlbumKind> {
         match n {
-             0 => Some(AlbumKind::Single),
-             1 => Some(AlbumKind::EP),
-             2 => Some(AlbumKind::LP),
-             _ => None
+            0 => Some(AlbumKind::Single),
+            1 => Some(AlbumKind::EP),
+            2 => Some(AlbumKind::LP),
+            _ => None,
         }
     }
 }
@@ -34,7 +34,7 @@ impl FromStr for AlbumKind {
             "single" => Ok(AlbumKind::Single),
             "ep" => Ok(AlbumKind::EP),
             "lp" => Ok(AlbumKind::LP),
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
@@ -49,7 +49,7 @@ pub struct Album {
 }
 
 #[derive(Insertable)]
-#[table_name="albums"]
+#[table_name = "albums"]
 pub struct NewAlbum {
     pub artist_credit_id: ArtistCreditId,
     pub kind: i32,

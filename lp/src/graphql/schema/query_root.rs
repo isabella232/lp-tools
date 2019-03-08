@@ -21,4 +21,3 @@ graphql_object!(QueryRoot: Context as "Query" |&self| {
         repo.search(&query)
     }
 });
-

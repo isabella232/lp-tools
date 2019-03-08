@@ -2,8 +2,8 @@ use std::str::FromStr;
 
 use chrono::NaiveDateTime;
 
-use crate::schema::media;
 use crate::models::ReleaseId;
+use crate::schema::media;
 
 pub type MediumId = i32;
 
@@ -26,7 +26,7 @@ impl FromStr for MediumKind {
             "blu-ray" => Ok(MediumKind::BluRay),
             "digital" => Ok(MediumKind::Digital),
             "vinyl" => Ok(MediumKind::Vinyl),
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
@@ -43,7 +43,7 @@ pub struct Medium {
 }
 
 #[derive(Insertable)]
-#[table_name="media"]
+#[table_name = "media"]
 pub struct NewMedium<'a> {
     pub release_id: ReleaseId,
     pub kind: i32,

@@ -10,7 +10,7 @@ use futures::Future;
 use futures_cpupool::CpuPool;
 use glob::glob;
 use lp::models::ReleaseId;
-use lp_import::{Context, parameterize, readers};
+use lp_import::{parameterize, readers, Context};
 use lp_magick::resize;
 use rand::distributions::Uniform;
 use rand::prelude::*;
@@ -27,7 +27,9 @@ pub struct HexGenerator {
 
 impl HexGenerator {
     fn new() -> HexGenerator {
-        HexGenerator { range: Uniform::new(0, HEX_CHARSET.len()) }
+        HexGenerator {
+            range: Uniform::new(0, HEX_CHARSET.len()),
+        }
     }
 }
 
@@ -39,7 +41,8 @@ impl Distribution<char> for HexGenerator {
 }
 
 fn read_toml<F>(pattern: &str, mut callback: F)
-    where F: FnMut(&Path, Value),
+where
+    F: FnMut(&Path, Value),
 {
     let entries = glob(pattern)
         .expect("bad glob pattern")
@@ -69,18 +72,14 @@ fn medium_kind_to_label(kind: i32) -> &'static str {
     }
 }
 
-fn update_release_artwork_data(release_id: ReleaseId,
-                               original_id: &str,
-                               thumbnail_id: &str)
-{
+fn update_release_artwork_data(release_id: ReleaseId, original_id: &str, thumbnail_id: &str) {
     use lp::schema::releases::dsl::*;
 
     let ctx = Context::new();
 
     let data = format!(
         r#"{{"original":{{"id":"{}"}},"thumbnail":{{"id":"{}"}}}}"#,
-        original_id,
-        thumbnail_id,
+        original_id, thumbnail_id,
     );
 
     diesel::update(releases.find(release_id))
@@ -155,7 +154,10 @@ fn main() {
 
             for medium in media {
                 let medium_kind = medium_kind_to_label(medium.kind);
-                let medium_id = format!("{}/{}/{}{}", id, disambiguation, medium_kind, medium.position);
+                let medium_id = format!(
+                    "{}/{}/{}{}",
+                    id, disambiguation, medium_kind, medium.position
+                );
                 ctx.media.insert(medium_id, medium);
             }
 
@@ -166,8 +168,10 @@ fn main() {
                 let pathname = pathname.to_string();
                 let disambiguation = disambiguation.to_string();
 
-                let original_id: String = hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
-                let thumbnail_id: String = hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
+                let original_id: String =
+                    hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
+                let thumbnail_id: String =
+                    hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
 
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());

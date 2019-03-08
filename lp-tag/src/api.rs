@@ -1,7 +1,7 @@
 use reqwest::{self, Client};
 use serde_json::json;
 
-use crate::{Root, Release};
+use crate::{Release, Root};
 
 static ENDPOINT: &'static str = "http://localhost:8000/graphql";
 
@@ -65,7 +65,8 @@ pub fn fetch_release(id: i32) -> reqwest::Result<Release> {
         }
     });
 
-    client.post(ENDPOINT)
+    client
+        .post(ENDPOINT)
         .json(&payload)
         .send()
         .and_then(|mut res| res.json::<Root>())

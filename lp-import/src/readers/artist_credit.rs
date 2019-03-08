@@ -2,8 +2,8 @@ use lp::models::ArtistCredit;
 use lp::repositories::ArtistCreditRepository;
 use toml::value::{Table, Value};
 
-use crate::Context;
 use crate::readers::{self, Error};
+use crate::Context;
 
 pub fn create(ctx: &Context, root: &Value) -> Result<ArtistCredit, Error> {
     if let Some(array) = root.get("artist-credits").and_then(Value::as_array) {
@@ -15,7 +15,9 @@ pub fn create(ctx: &Context, root: &Value) -> Result<ArtistCredit, Error> {
         table.insert(key, value);
         new(ctx, &[Value::Table(table)])
     } else {
-        Err(Error::Parse(String::from("artist-credits or artist-id missing")))
+        Err(Error::Parse(String::from(
+            "artist-credits or artist-id missing",
+        )))
     }
 }
 

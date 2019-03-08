@@ -2,8 +2,8 @@ use lp::models::{Artist, Membership};
 use lp::repositories::MembershipRepository;
 use toml::Value;
 
-use crate::Context;
 use crate::readers::{self, Error};
+use crate::Context;
 
 pub fn create(ctx: &Context, root: &Value, artist: &Artist) -> Result<Membership, Error> {
     new(ctx, root, artist)
@@ -12,11 +12,13 @@ pub fn create(ctx: &Context, root: &Value, artist: &Artist) -> Result<Membership
 fn new(ctx: &Context, root: &Value, artist: &Artist) -> Result<Membership, Error> {
     let artist_credit = readers::artist_credit::create(ctx, root)?;
 
-    let started_on = root.get("started-on")
+    let started_on = root
+        .get("started-on")
         .and_then(Value::as_str)
         .and_then(|s| s.parse().ok());
 
-    let ended_on = root.get("ended-on")
+    let ended_on = root
+        .get("ended-on")
         .and_then(Value::as_str)
         .and_then(|s| s.parse().ok());
 

@@ -21,7 +21,7 @@ pub struct Membership {
 }
 
 #[derive(Insertable)]
-#[table_name="memberships"]
+#[table_name = "memberships"]
 pub struct NewMembership {
     pub group_id: ArtistId,
     pub artist_credit_id: ArtistCreditId,

@@ -1,8 +1,8 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
-use crate::models::{Song, ArtistCreditId, NewSong};
+use crate::models::{ArtistCreditId, NewSong, Song};
 
 pub struct SongRepository<'a> {
     connection: &'a PgConnection,

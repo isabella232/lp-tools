@@ -1,8 +1,8 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
-use crate::models::{ArtistId, ArtistCreditId, ArtistCreditName, NewArtistCreditName};
+use crate::models::{ArtistCreditId, ArtistCreditName, ArtistId, NewArtistCreditName};
 
 pub struct ArtistCreditNameRepository<'a> {
     connection: &'a PgConnection,
@@ -14,15 +14,17 @@ impl<'a> ArtistCreditNameRepository<'a> {
     }
 
     #[allow(clippy::too_many_arguments)]
-    pub fn create(&self,
-                  artist_id: ArtistId,
-                  artist_credit_id: ArtistCreditId,
-                  position: i16,
-                  name: &str,
-                  locale: &str,
-                  is_default: bool,
-                  is_original: bool,
-                  separator: &'a str) -> ArtistCreditName {
+    pub fn create(
+        &self,
+        artist_id: ArtistId,
+        artist_credit_id: ArtistCreditId,
+        position: i16,
+        name: &str,
+        locale: &str,
+        is_default: bool,
+        is_original: bool,
+        separator: &'a str,
+    ) -> ArtistCreditName {
         use crate::schema::artist_credit_names;
 
         let now = Utc::now().naive_utc();

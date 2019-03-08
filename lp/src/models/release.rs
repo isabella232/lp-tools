@@ -1,7 +1,7 @@
 use chrono::{NaiveDate, NaiveDateTime};
 
-use crate::schema::releases;
 use crate::models::AlbumId;
+use crate::schema::releases;
 
 pub type ReleaseId = i32;
 
@@ -19,7 +19,7 @@ pub struct Release {
 }
 
 #[derive(Insertable)]
-#[table_name="releases"]
+#[table_name = "releases"]
 pub struct NewRelease<'a> {
     pub album_id: AlbumId,
     pub released_on: NaiveDate,

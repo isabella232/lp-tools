@@ -16,12 +16,10 @@ impl FromStr for Duration {
         s.split(':')
             .map(|v| v.parse().map_err(|_| ()))
             .collect::<Result<Vec<i32>, _>>()
-            .and_then(|v| {
-                match v.len() {
-                    1 => Ok(Duration(v[0])),
-                    2 => Ok(Duration(60 * v[0] + v[1])),
-                    _ => Err(())
-                }
+            .and_then(|v| match v.len() {
+                1 => Ok(Duration(v[0])),
+                2 => Ok(Duration(60 * v[0] + v[1])),
+                _ => Err(()),
             })
     }
 }

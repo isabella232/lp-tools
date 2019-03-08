@@ -1,6 +1,6 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
 use crate::models::{Medium, NewMedium, ReleaseId};
 
@@ -13,11 +13,13 @@ impl<'a> MediumRepository<'a> {
         MediumRepository { connection }
     }
 
-    pub fn create(&self,
-                  release_id: ReleaseId,
-                  kind: i32,
-                  position: i16,
-                  name: Option<&str>) -> Medium {
+    pub fn create(
+        &self,
+        release_id: ReleaseId,
+        kind: i32,
+        position: i16,
+        name: Option<&str>,
+    ) -> Medium {
         use crate::schema::media;
 
         let now = Utc::now().naive_utc();

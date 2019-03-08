@@ -1,10 +1,10 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
-use crate::PartialDate;
-use crate::models::{Artist, ArtistId, NewArtist};
 use crate::models::ArtistName;
+use crate::models::{Artist, ArtistId, NewArtist};
+use crate::PartialDate;
 
 pub struct ArtistRepository<'a> {
     connection: &'a PgConnection,
@@ -21,7 +21,7 @@ impl<'a> ArtistRepository<'a> {
     }
 
     pub fn search(&self, query: &str) -> Vec<Artist> {
-        use crate::schema::{artists, artist_names};
+        use crate::schema::{artist_names, artists};
 
         let pattern = format!("%{}%", query);
 

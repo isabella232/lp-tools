@@ -16,7 +16,7 @@ pub struct ArtistUrl {
 }
 
 #[derive(Insertable)]
-#[table_name="artist_urls"]
+#[table_name = "artist_urls"]
 pub struct NewArtistUrl<'a> {
     pub artist_id: ArtistId,
     pub url: &'a str,

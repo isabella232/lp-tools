@@ -5,7 +5,10 @@ pub mod magick_wand;
 
 use std::path::Path;
 
-pub fn resize<P>(src: P, dst: P, width: usize, height: usize) where P: AsRef<Path> {
+pub fn resize<P>(src: P, dst: P, width: usize, height: usize)
+where
+    P: AsRef<Path>,
+{
     let wand = MagickWand::new();
     wand.read_image(src);
 
@@ -25,5 +28,4 @@ pub fn resize<P>(src: P, dst: P, width: usize, height: usize) where P: AsRef<Pat
     wand.crop_image(width, height, x as isize, y as isize);
 
     wand.write_image(dst);
-
 }

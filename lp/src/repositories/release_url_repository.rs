@@ -1,8 +1,8 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
-use crate::models::{ReleaseId, ReleaseUrl, NewReleaseUrl};
+use crate::models::{NewReleaseUrl, ReleaseId, ReleaseUrl};
 
 pub struct ReleaseUrlRepository<'a> {
     connection: &'a PgConnection,

@@ -1,6 +1,6 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
 use crate::models::{ArtistCredit, ArtistCreditId, NewArtistCredit};
 

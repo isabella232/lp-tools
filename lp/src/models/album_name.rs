@@ -18,7 +18,7 @@ pub struct AlbumName {
 }
 
 #[derive(Insertable)]
-#[table_name="album_names"]
+#[table_name = "album_names"]
 pub struct NewAlbumName<'a> {
     pub album_id: AlbumId,
     pub name: &'a str,

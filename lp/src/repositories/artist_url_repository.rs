@@ -1,6 +1,6 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
 use crate::models::{ArtistId, ArtistUrl, NewArtistUrl};
 
@@ -14,7 +14,7 @@ impl<'a> ArtistUrlRepository<'a> {
     }
 
     pub fn find_by_artist_id(&self, id: ArtistId) -> Vec<ArtistUrl> {
-        use crate::schema::artist_urls::dsl::{artist_urls, artist_id};
+        use crate::schema::artist_urls::dsl::{artist_id, artist_urls};
 
         artist_urls
             .filter(artist_id.eq(id))

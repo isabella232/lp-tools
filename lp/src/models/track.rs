@@ -18,7 +18,7 @@ pub struct Track {
 }
 
 #[derive(Insertable)]
-#[table_name="tracks"]
+#[table_name = "tracks"]
 pub struct NewTrack {
     pub medium_id: MediumId,
     pub artist_credit_id: ArtistCreditId,

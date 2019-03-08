@@ -1,6 +1,6 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
 use crate::models::{ArtistId, ArtistName, NewArtistName};
 
@@ -14,7 +14,7 @@ impl<'a> ArtistNameRepository<'a> {
     }
 
     pub fn find_by_artist_id(&self, id: ArtistId) -> Vec<ArtistName> {
-        use crate::schema::artist_names::dsl::{artist_names, artist_id};
+        use crate::schema::artist_names::dsl::{artist_id, artist_names};
 
         artist_names
             .filter(artist_id.eq(id))
@@ -22,12 +22,14 @@ impl<'a> ArtistNameRepository<'a> {
             .expect("failed to load names")
     }
 
-    pub fn create(&self,
-                  artist_id: ArtistId,
-                  name: &str,
-                  locale: &str,
-                  is_default: bool,
-                  is_original: bool) -> ArtistName {
+    pub fn create(
+        &self,
+        artist_id: ArtistId,
+        name: &str,
+        locale: &str,
+        is_default: bool,
+        is_original: bool,
+    ) -> ArtistName {
         use crate::schema::artist_names;
 
         let now = Utc::now().naive_utc();

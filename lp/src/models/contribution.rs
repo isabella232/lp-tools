@@ -2,8 +2,8 @@ use std::str::FromStr;
 
 use chrono::NaiveDateTime;
 
-use crate::schema::contributions;
 use crate::models::{ArtistCreditId, SongId};
+use crate::schema::contributions;
 
 pub type ContributionId = i32;
 
@@ -24,11 +24,10 @@ impl FromStr for ContributionKind {
             "arranger" => Ok(ContributionKind::Arranger),
             "composer" => Ok(ContributionKind::Composer),
             "lyricist" => Ok(ContributionKind::Lyricist),
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
-
 
 #[derive(Debug, Queryable)]
 pub struct Contribution {
@@ -41,7 +40,7 @@ pub struct Contribution {
 }
 
 #[derive(Insertable)]
-#[table_name="contributions"]
+#[table_name = "contributions"]
 pub struct NewContribution {
     pub artist_credit_id: ArtistCreditId,
     pub song_id: SongId,

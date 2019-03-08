@@ -1,8 +1,8 @@
 use chrono::Utc;
-use diesel::{self, PgConnection};
 use diesel::prelude::*;
+use diesel::{self, PgConnection};
 
-use crate::models::{Track, ArtistCreditId, MediumId, NewTrack, SongId};
+use crate::models::{ArtistCreditId, MediumId, NewTrack, SongId, Track};
 
 pub struct TrackRepository<'a> {
     connection: &'a PgConnection,
@@ -13,12 +13,14 @@ impl<'a> TrackRepository<'a> {
         TrackRepository { connection }
     }
 
-    pub fn create(&self,
-                  medium_id: MediumId,
-                  artist_credit_id: ArtistCreditId,
-                  song_id: SongId,
-                  position: i16,
-                  duration: Option<i32>) -> Track {
+    pub fn create(
+        &self,
+        medium_id: MediumId,
+        artist_credit_id: ArtistCreditId,
+        song_id: SongId,
+        position: i16,
+        duration: Option<i32>,
+    ) -> Track {
         use crate::schema::tracks;
 
         let now = Utc::now().naive_utc();

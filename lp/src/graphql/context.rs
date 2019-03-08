@@ -19,7 +19,9 @@ impl Context {
 
 impl Default for Context {
     fn default() -> Context {
-        Context { connection: db::connection().get().unwrap() }
+        Context {
+            connection: db::connection().get().unwrap(),
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 #![allow(proc_macro_derive_resolution_fallback)]
 
-#[macro_use] extern crate diesel;
+#[macro_use]
+extern crate diesel;
 
 pub use self::duration::Duration;
 pub use self::partial_date::PartialDate;

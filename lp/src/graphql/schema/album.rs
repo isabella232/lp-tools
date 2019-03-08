@@ -2,7 +2,7 @@ use juniper::{graphql_object, ID};
 
 use crate::graphql::Context;
 use crate::models::{Album, AlbumKind, AlbumName, ArtistCredit};
-use crate::repositories::{ArtistCreditRepository, AlbumNameRepository};
+use crate::repositories::{AlbumNameRepository, ArtistCreditRepository};
 
 graphql_object!(Album: Context |&self| {
     field id() -> ID {

@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 
-use crate::schema::artist_credit_names;
 use crate::models::{ArtistCreditId, ArtistId};
+use crate::schema::artist_credit_names;
 
 pub type ArtistCreditNameId = i32;
 
@@ -21,7 +21,7 @@ pub struct ArtistCreditName {
 }
 
 #[derive(Insertable)]
-#[table_name="artist_credit_names"]
+#[table_name = "artist_credit_names"]
 pub struct NewArtistCreditName<'a> {
     pub artist_id: ArtistId,
     pub artist_credit_id: ArtistCreditId,
