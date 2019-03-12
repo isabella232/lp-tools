@@ -73,9 +73,8 @@ fn main() {
     let genre = release.guess_genre();
     let year = release.year();
 
-    for (pathname, track) in entries.iter().zip(tracks.iter()) {
-        let path = pathname.to_str().unwrap();
-        let file = File::new(path);
+    for (src, track) in entries.iter().zip(tracks.iter()) {
+        let file = File::new(src);
         file.strip();
 
         let tag = file.tag();
@@ -100,12 +99,12 @@ fn main() {
 
         file.save();
 
-        let mut dst = pathname.clone();
+        let mut dst = src.clone();
         dst.pop();
         let basename = sanitize_pathname(&title);
         dst.push(&format!("{:02} {}.mp3", track.position, basename));
 
-        fs::rename(&pathname, &dst).unwrap();
+        fs::rename(&src, &dst).unwrap();
     }
 
     let mut dst = PathBuf::from(&working_dir);
