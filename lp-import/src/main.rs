@@ -89,9 +89,9 @@ fn update_release_artwork_data(release_id: ReleaseId, original_id: &str, thumbna
 }
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let pathname = args.get(1).expect("missing working directory");
-    let store_dir = args.get(2).cloned();
+    let mut args = env::args().skip(1);
+    let pathname = args.next().expect("missing working directory");
+    let store_dir = args.next();
 
     if let Some(ref dst) = store_dir {
         fs::create_dir_all(dst).expect("failed to create store_dir");
