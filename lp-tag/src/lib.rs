@@ -1,4 +1,4 @@
-use std::io::Read;
+use std::{error::Error, io::Read};
 
 use serde_derive::Deserialize;
 
@@ -87,13 +87,13 @@ pub struct Release {
 }
 
 impl Release {
-    pub fn artwork(&self) -> Vec<u8> {
-        let mut response = reqwest::get(&self.artwork_urls.original).unwrap();
+    pub fn artwork(&self) -> Result<Vec<u8>, Box<Error>> {
+        let mut response = reqwest::get(&self.artwork_urls.original)?;
 
         let mut data = Vec::new();
-        response.read_to_end(&mut data).unwrap();;
+        response.read_to_end(&mut data)?;
 
-        data
+        Ok(data)
     }
 
     pub fn guess_genre(&self) -> &'static str {

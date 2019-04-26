@@ -68,7 +68,7 @@ fn main() {
 
     FrameFactory::instance().set_default_text_encoding(StringType::UTF16);
 
-    let artwork = release.artwork();
+    let artwork = release.artwork().unwrap();
     let album = release.album.default_name();
     let genre = release.guess_genre();
     let year = release.year();
