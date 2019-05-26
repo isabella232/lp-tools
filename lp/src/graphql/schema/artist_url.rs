@@ -1,18 +1,18 @@
-use juniper::{graphql_object, ID};
+use juniper::ID;
 
-use crate::graphql::Context;
 use crate::models::ArtistUrl;
 
-graphql_object!(ArtistUrl: Context |&self| {
-    field id() -> ID {
+#[juniper::object]
+impl ArtistUrl {
+    fn id(&self) -> ID {
         ID::from(format!("{}", self.id))
     }
 
-    field url() -> &str {
+    fn url(&self) -> &str {
         &self.url
     }
 
-    field name() -> &str {
+    fn name(&self) -> &str {
         &self.name
     }
-});
+}

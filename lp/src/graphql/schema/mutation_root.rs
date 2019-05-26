@@ -1,10 +1,8 @@
-use juniper::{graphql_object, GraphQLInputObject};
+use juniper::GraphQLInputObject;
 
 use crate::graphql::Context;
 use crate::models::{Artist, ArtistKind};
 use crate::repositories::ArtistRepository;
-
-pub struct MutationRoot;
 
 #[derive(GraphQLInputObject)]
 struct CreateArtistInput {
@@ -13,8 +11,14 @@ struct CreateArtistInput {
     disambiguation: Option<String>,
 }
 
-graphql_object!(MutationRoot: Context as "Mutation" |&self| {
-    field create_artist(&executor, input: CreateArtistInput) -> Artist {
+pub struct MutationRoot;
+
+#[juniper::object(
+    name = "Mutation",
+    Context = Context,
+)]
+impl MutationRoot {
+    fn create_artist(executor: &Executor, input: CreateArtistInput) -> Artist {
         let ctx = executor.context();
         let repo = ArtistRepository::new(ctx.connection());
 
@@ -24,4 +28,4 @@ graphql_object!(MutationRoot: Context as "Mutation" |&self| {
 
         repo.create(kind as i32, &country, None, None, disambiguation)
     }
-});
+}

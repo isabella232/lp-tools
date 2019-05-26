@@ -1,26 +1,26 @@
-use juniper::{graphql_object, ID};
+use juniper::ID;
 
-use crate::graphql::Context;
 use crate::models::ArtistName;
 
-graphql_object!(ArtistName: Context |&self| {
-    field id() -> ID {
+#[juniper::object]
+impl ArtistName {
+    fn id(&self) -> ID {
         ID::from(format!("{}", self.id))
     }
 
-    field name() -> &str {
+    fn name(&self) -> &str {
         &self.name
     }
 
-    field locale() -> &str {
+    fn locale(&self) -> &str {
         &self.locale
     }
 
-    field is_default() -> bool {
+    fn is_default(&self) -> bool {
         self.is_default
     }
 
-    field is_original() -> bool {
+    fn is_original(&self) -> bool {
         self.is_original
     }
-});
+}

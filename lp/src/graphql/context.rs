@@ -1,5 +1,4 @@
 use diesel::pg::PgConnection;
-use juniper;
 
 use crate::db::{self, PooledPgConnection};
 

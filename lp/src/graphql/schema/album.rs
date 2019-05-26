@@ -1,27 +1,28 @@
-use juniper::{graphql_object, ID};
+use juniper::ID;
 
 use crate::graphql::Context;
 use crate::models::{Album, AlbumKind, AlbumName, ArtistCredit};
 use crate::repositories::{AlbumNameRepository, ArtistCreditRepository};
 
-graphql_object!(Album: Context |&self| {
-    field id() -> ID {
+#[juniper::object(Context = Context)]
+impl Album {
+    fn id(&self) -> ID {
         ID::from(format!("{}", self.id))
     }
 
-    field artist_credit(&executor) -> ArtistCredit {
+    fn artist_credit(executor: &Executor) -> ArtistCredit {
         let ctx = executor.context();
         let repo = ArtistCreditRepository::new(ctx.connection());
         repo.find(self.artist_credit_id).unwrap()
     }
 
-    field kind() -> AlbumKind {
+    fn kind(&self) -> AlbumKind {
         AlbumKind::from_i32(self.kind).unwrap()
     }
 
-    field names(&executor) -> Vec<AlbumName> {
+    fn names(executor: &Executor) -> Vec<AlbumName> {
         let ctx = executor.context();
         let repo = AlbumNameRepository::new(ctx.connection());
         repo.find_by_album_id(self.id)
     }
-});
+}
