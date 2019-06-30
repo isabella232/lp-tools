@@ -100,7 +100,7 @@ fn main() {
     let pool = CpuPool::new_num_cpus();
     let mut tasks = Vec::new();
 
-    let mut rng = SmallRng::from_entropy();
+    let mut rng = rand::thread_rng();
     let hex_generator = HexGenerator::new();
 
     let mut ctx = Context::new();
@@ -168,10 +168,14 @@ fn main() {
                 let pathname = pathname.to_string();
                 let disambiguation = disambiguation.to_string();
 
-                let original_id: String =
-                    hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
-                let thumbnail_id: String =
-                    hex_generator.sample_iter(&mut rng).take(ID_LEN).collect();
+                let original_id: String = (&hex_generator)
+                    .sample_iter(&mut rng)
+                    .take(ID_LEN)
+                    .collect();
+                let thumbnail_id: String = (&hex_generator)
+                    .sample_iter(&mut rng)
+                    .take(ID_LEN)
+                    .collect();
 
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());
