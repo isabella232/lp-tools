@@ -9,7 +9,7 @@ pub struct ReleaseRepository<'a> {
 }
 
 impl<'a> ReleaseRepository<'a> {
-    pub fn new(connection: &PgConnection) -> ReleaseRepository {
+    pub fn new(connection: &PgConnection) -> ReleaseRepository<'_> {
         ReleaseRepository { connection }
     }
 

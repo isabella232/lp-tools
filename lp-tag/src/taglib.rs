@@ -45,7 +45,7 @@ pub struct Tag {
 }
 
 impl Tag {
-    pub fn add_frame(&self, frame: &Frame) {
+    pub fn add_frame(&self, frame: &dyn Frame) {
         unsafe {
             ffi::taglib_tag_add_frame(self.ptr, frame.as_frame_ptr());
         }

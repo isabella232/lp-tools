@@ -9,7 +9,7 @@ pub struct TrackRepository<'a> {
 }
 
 impl<'a> TrackRepository<'a> {
-    pub fn new(connection: &PgConnection) -> TrackRepository {
+    pub fn new(connection: &PgConnection) -> TrackRepository<'_> {
         TrackRepository { connection }
     }
 

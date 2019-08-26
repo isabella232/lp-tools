@@ -9,7 +9,7 @@ pub struct ContributionRepository<'a> {
 }
 
 impl<'a> ContributionRepository<'a> {
-    pub fn new(connection: &PgConnection) -> ContributionRepository {
+    pub fn new(connection: &PgConnection) -> ContributionRepository<'_> {
         ContributionRepository { connection }
     }
 

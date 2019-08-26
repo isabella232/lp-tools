@@ -10,7 +10,7 @@ pub struct MembershipRepository<'a> {
 }
 
 impl<'a> MembershipRepository<'a> {
-    pub fn new(connection: &PgConnection) -> MembershipRepository {
+    pub fn new(connection: &PgConnection) -> MembershipRepository<'_> {
         MembershipRepository { connection }
     }
 

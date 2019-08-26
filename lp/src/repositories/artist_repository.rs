@@ -11,7 +11,7 @@ pub struct ArtistRepository<'a> {
 }
 
 impl<'a> ArtistRepository<'a> {
-    pub fn new(connection: &PgConnection) -> ArtistRepository {
+    pub fn new(connection: &PgConnection) -> ArtistRepository<'_> {
         ArtistRepository { connection }
     }
 

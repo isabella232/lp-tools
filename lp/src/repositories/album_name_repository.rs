@@ -9,7 +9,7 @@ pub struct AlbumNameRepository<'a> {
 }
 
 impl<'a> AlbumNameRepository<'a> {
-    pub fn new(connection: &PgConnection) -> AlbumNameRepository {
+    pub fn new(connection: &PgConnection) -> AlbumNameRepository<'_> {
         AlbumNameRepository { connection }
     }
 

@@ -9,7 +9,7 @@ pub struct MediumRepository<'a> {
 }
 
 impl<'a> MediumRepository<'a> {
-    pub fn new(connection: &PgConnection) -> MediumRepository {
+    pub fn new(connection: &PgConnection) -> MediumRepository<'_> {
         MediumRepository { connection }
     }
 
