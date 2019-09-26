@@ -101,6 +101,7 @@ impl Release {
             "JP" => "Japanese Pop",
             "KR" => "Korean Pop",
             "CN" => "Chinese Pop",
+            "US" => "Pop",
             _ => panic!("unknown country"),
         }
     }
