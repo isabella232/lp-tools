@@ -40,6 +40,14 @@ impl Distribution<char> for HexGenerator {
     }
 }
 
+fn generate_id<G, R>(generator: &G, rng: &mut R) -> String
+where
+    G: Distribution<char>,
+    R: Rng,
+{
+    generator.sample_iter(rng).take(ID_LEN).collect()
+}
+
 fn read_toml<F>(pattern: &str, mut callback: F)
 where
     F: FnMut(&Path, Value),
@@ -168,14 +176,8 @@ fn main() {
                 let pathname = pathname.to_string();
                 let disambiguation = disambiguation.to_string();
 
-                let original_id: String = (&hex_generator)
-                    .sample_iter(&mut rng)
-                    .take(ID_LEN)
-                    .collect();
-                let thumbnail_id: String = (&hex_generator)
-                    .sample_iter(&mut rng)
-                    .take(ID_LEN)
-                    .collect();
+                let original_id = generate_id(&hex_generator, &mut rng);
+                let thumbnail_id = generate_id(&hex_generator, &mut rng);
 
                 let task = pool.spawn_fn(move || {
                     let res: Result<(), ()> = Ok(());
