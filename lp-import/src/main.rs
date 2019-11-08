@@ -6,8 +6,7 @@ use std::{
 };
 
 use diesel::prelude::*;
-use futures::Future;
-use futures_cpupool::CpuPool;
+use futures::executor::ThreadPool;
 use glob::glob;
 use lp::models::ReleaseId;
 use lp_import::{parameterize, readers, Context};
@@ -49,15 +48,15 @@ where
 }
 
 // id - album id
-fn make_thumbnail(
-    prefix: &str,
+async fn make_thumbnail(
+    prefix: String,
     release_id: i32,
-    id: &str,
-    disambiguation: &str,
-    first_format: &str,
-    original_id: &str,
-    thumbnail_id: &str,
-    dst_prefix: &str,
+    id: String,
+    disambiguation: String,
+    first_format: String,
+    original_id: String,
+    thumbnail_id: String,
+    dst_prefix: String,
 ) {
     let attachments_prefix = format!("{}/-attachments/albums/", prefix);
 
@@ -87,7 +86,7 @@ fn make_thumbnail(
 
     fs::copy(&thumbnail_src, &dst).expect("thumbnail copy failed");
 
-    update_release_artwork_data(release_id, original_id, thumbnail_id);
+    update_release_artwork_data(release_id, &original_id, &thumbnail_id);
 }
 
 fn read_toml<F>(pattern: &str, mut callback: F)
@@ -147,8 +146,7 @@ fn main() {
         fs::create_dir_all(dst).expect("failed to create store_dir");
     }
 
-    let pool = CpuPool::new_num_cpus();
-    let mut tasks = Vec::new();
+    let pool = ThreadPool::new().unwrap();
 
     let mut rng = rand::thread_rng();
     let hex_generator = HexGenerator::new();
@@ -200,7 +198,7 @@ fn main() {
                 String::from("default")
             };
 
-            let first_format = medium_kind_to_label(media[0].kind);
+            let first_format = medium_kind_to_label(media[0].kind).to_string();
 
             for medium in media {
                 let medium_kind = medium_kind_to_label(medium.kind);
@@ -221,22 +219,16 @@ fn main() {
                 let original_id = generate_id(&hex_generator, &mut rng);
                 let thumbnail_id = generate_id(&hex_generator, &mut rng);
 
-                let task = pool.spawn_fn(move || {
-                    make_thumbnail(
-                        &pathname,
-                        release_id,
-                        &id,
-                        &disambiguation,
-                        &first_format,
-                        &original_id,
-                        &thumbnail_id,
-                        &dst_prefix,
-                    );
-
-                    Ok::<_, ()>(())
-                });
-
-                tasks.push(task);
+                pool.spawn_ok(make_thumbnail(
+                    pathname,
+                    release_id,
+                    id,
+                    disambiguation,
+                    first_format,
+                    original_id,
+                    thumbnail_id,
+                    dst_prefix,
+                ));
             }
         }
     });
@@ -275,10 +267,4 @@ fn main() {
             panic!("{}: {:?}", path, e);
         }
     });
-
-    // attachments
-
-    for task in tasks {
-        task.wait().unwrap();
-    }
 }
