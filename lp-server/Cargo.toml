@@ -5,7 +5,7 @@ authors = ["Michael Macias <zaeleus@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-juniper = "0.13.1"
-juniper_warp = "0.4.0"
+juniper = "0.14.1"
+juniper_warp = "0.5.1"
 lp = { path = "../lp" }
 warp = "0.1.13"

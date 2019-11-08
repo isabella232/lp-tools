@@ -7,6 +7,6 @@ edition = "2018"
 [dependencies]
 chrono = "0.4.0"
 diesel = { version = "1.1.1", features = ["chrono", "postgres", "r2d2"] }
-dotenv = "0.14.1"
-juniper = "0.13.1"
+dotenv = "0.15.0"
+juniper = "0.14.1"
 lazy_static = "1.0.0"
