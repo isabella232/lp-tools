@@ -18,8 +18,8 @@ use toml::Value;
 
 const ID_LEN: usize = 32;
 
-static ARTIST_KINDS: [&'static str; 2] = ["people", "groups"];
-static HEX_CHARSET: &'static [u8] = b"0123456789abcdef";
+static ARTIST_KINDS: [&str; 2] = ["people", "groups"];
+static HEX_CHARSET: &[u8] = b"0123456789abcdef";
 
 pub struct HexGenerator {
     range: Uniform<usize>,
