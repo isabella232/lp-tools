@@ -88,7 +88,7 @@ pub struct Release {
 
 impl Release {
     pub fn artwork(&self) -> Result<Vec<u8>, Box<dyn Error>> {
-        let mut response = reqwest::get(&self.artwork_urls.original)?;
+        let mut response = reqwest::blocking::get(&self.artwork_urls.original)?;
 
         let mut data = Vec::new();
         response.read_to_end(&mut data)?;
