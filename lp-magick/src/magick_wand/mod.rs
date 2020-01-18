@@ -2,12 +2,23 @@ use crate::ffi;
 
 mod image;
 
+use std::sync::Once;
+
+static GENESIS: Once = Once::new();
+
+fn magick_wand_genesis() {
+    unsafe {
+        ffi::MagickWandGenesis();
+    }
+}
+
 pub struct MagickWand {
     ptr: *mut ffi::MagickWand,
 }
 
 impl MagickWand {
     pub fn new() -> MagickWand {
+        GENESIS.call_once(|| magick_wand_genesis());
         MagickWand::default()
     }
 
